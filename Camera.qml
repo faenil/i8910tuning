@@ -158,7 +158,7 @@ Rectangle{
      		}	
 
 	}
-
+lol
 	Image{
 	anchors.horizontalCenter: parent.horizontalCenter
 	width: 128
