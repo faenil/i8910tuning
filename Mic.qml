@@ -1,16 +1,17 @@
 import QtQuick 1.0
-
+import "startupChecks.js" as Checks
+import "popups.js" as Popups
 Rectangle{
         id: mic
         color:"transparent"
         clip: true
         width: 360
-        height: 565
+        height: 640
 
 
         Image{
         source: "images/background.png"
-        x:-1080
+        x:-1800
         fillMode: Image.Tile
         }
 
@@ -18,10 +19,10 @@ Rectangle{
                 id: col
                 spacing: 5
                 anchors.top:  parent.top
-                anchors.topMargin: 20
+                anchors.topMargin: 75
                 anchors.horizontalCenter: parent.horizontalCenter
-                Slider{id:micamp; propertyname: "Mic Amp"; value: 0; step: 6; minimum: 0; maximum: 30}
-                Slider{id:channel; propertyname: "Mic Channel"; value: 0; step: 1; minimum: 0; maximum: 31}
+                Slider{id:micamp; anchors.horizontalCenter: parent.horizontalCenter; propertyname: "Mic Amp"; value: 0; step: 6; minimum: 0; maximum: 30}
+                Slider{id:channel; anchors.horizontalCenter: parent.horizontalCenter; propertyname: "Mic Channel"; value: 0; step: 1; minimum: 0; maximum: 31}
 
 
                 Image{
@@ -39,7 +40,7 @@ Rectangle{
                     MouseArea{
                         id: micButt
                         anchors.fill: parent
-                        onClicked: {if (i8910tuning.changeMicSens_slot(micamp.value, channel.value)) {page.errbox.success = false; page.errmsg.text = "Could not change Mic Settings"; page.errbox.opacity = 0.9;} else {page.errbox.success = true; page.errmsg.text = "Mic Settings changed and saved"; page.errbox.opacity = 0.9;}}
+                        onClicked: {if (i8910tuning.changeMicSens_slot(micamp.value, channel.value)) {Popups.showErrorBox("Could not change Mic Settings");} else {Popups.showSuccessBox("Mic Settings changed and saved");}}
                     }
                     states: State {
                         name: "pressed"; when: micButt.pressed == true

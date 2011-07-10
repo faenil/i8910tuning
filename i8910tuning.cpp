@@ -81,13 +81,13 @@ TInt i8910tuning::ChangeValInt(const TUid KUidRepository, const TUint32 key, con
 	intstr = QString::number(err);
 	
 	if(err) {
-		QMessageBox::information(this, tr("Error while changing value"), "NewL ChangeValInt error:"+intstr);
+                //QMessageBox::information(this, tr("Error while changing value"), "NewL ChangeValInt error:"+intstr);
 		return err;
 	}
 	err = iRepository->Set(key, newkeyvalue); 
 	intstr = QString::number(err);
 	if(err) {
-                QMessageBox::information(this, tr("Error while changing value"), "Set error:"+intstr);
+                //QMessageBox::information(this, tr("Error while changing value"), "Set error:"+intstr);
 		return err;
 	}
 	delete iRepository;
@@ -98,20 +98,20 @@ TInt i8910tuning::ChangeValInt(const TUid KUidRepository, const TUint32 key, con
 TInt i8910tuning::ChangeValStr(const TUid KUidRepository, const TUint32 key, const QString newkeyvalue){
 #ifdef Q_OS_SYMBIAN
         TInt err;
-        TBuf<1024> tbuf(newkeyvalue.utf16());
+        TBuf<254> tbuf(newkeyvalue.utf16());
         CRepository* iRepository = 0;
         QString intstr;
         TRAP(err, iRepository = CRepository::NewL(KUidRepository));
         intstr = QString::number(err);
 
         if(err) {
-                QMessageBox::information(this, tr("Error while changing value"), "NewL ChangeValInt error:"+intstr);
+                //QMessageBox::information(this, tr("Error while changing value"), "NewL ChangeValInt error:"+intstr);
                 return err;
         }
         err = iRepository->Set(key, tbuf);
         intstr = QString::number(err);
         if(err) {
-                QMessageBox::information(this, tr("Error while changing value"), "Set error:"+intstr);
+                //QMessageBox::information(this, tr("Error while changing value"), "Set error:"+intstr);
                 return err;
         }
         delete iRepository;
@@ -129,7 +129,7 @@ TInt i8910tuning::ReadValInt(const TUid KUidRepository, const TUint32 key){
 	intstr = QString::number(err);
 	
 	if(err) {
-		QMessageBox::information(this, tr("Error while reading value"), "NewL ReadValInt error:"+intstr);
+                //QMessageBox::information(this, tr("Error while reading value"), "NewL ReadValInt error:"+intstr);
 		delete iRepository;
 		return err;
 	}
@@ -137,7 +137,7 @@ TInt i8910tuning::ReadValInt(const TUid KUidRepository, const TUint32 key){
 	intstr = QString::number(err);
 	/*intstr.number(val);*/
 	if(err) {
-		QMessageBox::information(this, tr("Error while reading value"), "Get error:"+intstr);
+                //QMessageBox::information(this, tr("Error while reading value"), "Get error:"+intstr);
 		delete iRepository;
 		return err;
 	}
@@ -151,7 +151,7 @@ TInt i8910tuning::ReadValInt(const TUid KUidRepository, const TUint32 key){
 TInt i8910tuning::ReadValStr(const TUid KUidRepository, const TUint32 key, QString* retval){
 #ifdef Q_OS_SYMBIAN
     TInt err = 0;
-        TBuf<1024> val;
+        TBuf<254> val;
         //I want to return a QString, not a TBuf
         QString intstr;
         CRepository* iRepository = 0;
@@ -159,7 +159,7 @@ TInt i8910tuning::ReadValStr(const TUid KUidRepository, const TUint32 key, QStri
         intstr = QString::number(err);
 
         if(err) {
-                QMessageBox::information(this, tr("Error while reading value"), "NewL ReadValInt error:"+intstr);
+                //QMessageBox::information(this, tr("Error while reading value"), "NewL ReadValInt error:"+intstr);
                 delete iRepository;
                 return err;
         }
@@ -167,7 +167,7 @@ TInt i8910tuning::ReadValStr(const TUid KUidRepository, const TUint32 key, QStri
         intstr = QString::number(err);
         /*intstr.number(val);*/
         if(err) {
-                QMessageBox::information(this, tr("Error while reading value"), "Get error:"+intstr);
+                //QMessageBox::information(this, tr("Error while reading value"), "Get error:"+intstr);
                 delete iRepository;
                 return err;
         }
@@ -195,8 +195,11 @@ int i8910tuning::AFphoto_slot()
 	
 	intstr = QString::number(val);
         //QMessageBox::information(this, tr("Error while reading value"), "AFphoto returns:"+intstr);
+        //*log2 << QString::number(val) + " returned by afphoto_slot\n";
+
 	return val;
 #endif
+        return -1;
 }
 
 
@@ -209,9 +212,11 @@ int i8910tuning::PFphoto_slot()
 	const TUint32 key = 0x3A;
 	error = ChangeValInt( repository, key, 0);
 	val = ReadValInt(repository, key);
-	
+        //*log2 << QString::number(val) + " returned by pfphoto_slot\n";
+
 	return val;
 #endif
+        return -1;
 }
 
 int i8910tuning::CheckPhotoFocus_slot()
@@ -229,8 +234,11 @@ int i8910tuning::CheckPhotoFocus_slot()
 
         //QMessageBox::information(this, tr("checkphotofocus"), intstr);
 
+        //*log2 << QString::number(val) + " returned by checkphoto_slot\n";
+
         return val;
 #endif
+        return 0;
 }
 
 int i8910tuning::CheckVideoFocus_slot()
@@ -240,10 +248,12 @@ int i8910tuning::CheckVideoFocus_slot()
 	static const TUid repository = { 0x101F8808 };
 	const TUint32 key = 0x3B;
 	val = ReadValInt(repository, key);
-	QString intstr = QString::number(val);
 	//AF: 1, PF: 0, ERROR : -1 (penso, KErrNotFound)
+        //*log2 << QString::number(val) + " returned by checkvideo_slot\n";
+
 	return val;
 #endif
+        return 0;
 }
 
 int i8910tuning::AFvideo_slot()
@@ -255,9 +265,11 @@ int i8910tuning::AFvideo_slot()
 	const TUint32 key = 0x3B;
 	error = ChangeValInt( repository, key, 1);
 	val = ReadValInt(repository, key);	
-	
+        //*log2 << QString::number(val) + " returned by afvideo_slot\n";
+
 	return val;
 #endif
+        return -1;
 }
 
 int i8910tuning::PFvideo_slot()
@@ -269,9 +281,11 @@ int i8910tuning::PFvideo_slot()
 	const TUint32 key = 0x3B;
 	error = ChangeValInt( repository, key, 0);
 	val = ReadValInt(repository, key);
-	
+        //*log2 << QString::number(val) + " returned by pfvideo_slot\n";
+
 	return val;
 #endif
+        return -1;
 }
 
 int i8910tuning::supprON_slot()
@@ -286,6 +300,7 @@ int i8910tuning::supprON_slot()
 	if (videosett.copy("C:/Private/10202BE9/10282EDC.txt")) return 0;
 		else return -1;
  #endif
+        return -1;
 }
 
 int i8910tuning::supprOFF_slot()
@@ -300,21 +315,30 @@ int i8910tuning::supprOFF_slot()
 	if (videosett.copy("C:/Private/10202BE9/10282EDC.txt")) return 0;
 		else return -1;
 #endif
+        return -1;
 }
 
 int i8910tuning::checkSuppr_slot(){
 #ifdef Q_OS_SYMBIAN
+        QByteArray comparefile;
 	QFile oldsett("C:/Private/10202BE9/10282EDC.txt");
-	if (!oldsett.exists()) return -1;
+        if (!oldsett.exists()) { return -1;}
 	QFile on("E:/data/SymbianTuning/noisesuppr/ON.txt");
-	if (!on.exists()) return -2;
+        if (!on.exists()) { return -2;}
 	QFile off("E:/data/SymbianTuning/noisesuppr/OFF.txt");
-	if (!off.exists()) return -3;
+        if (!off.exists()) { return -3;}
 	
-	if (on.readAll() == oldsett.readAll()) return 1;
-	if (off.readAll() == oldsett.readAll()) return 0;
-	return -4;
+        if (!oldsett.open(QIODevice::ReadOnly)) {return -5;}
+        if (!off.open(QIODevice::ReadOnly)) { oldsett.close(); return -6;}
+        if (!on.open(QIODevice::ReadOnly)) {oldsett.close(); off.close(); return -7;}
+
+        comparefile = oldsett.readAll();
+        if (on.readAll() == comparefile) {off.close(); on.close(); oldsett.close(); return 1;}
+        if (off.readAll() == comparefile) {off.close(); on.close(); oldsett.close(); return 0;}
+
+        {off.close(); on.close(); oldsett.close(); return -4;}
 #endif
+        return 0;
 }
 int i8910tuning::milestone_slot()
 {
@@ -326,6 +350,7 @@ int i8910tuning::milestone_slot()
 	if (codec.copy("C:/System/Data/jpegenc_sn.dll64P")) return 0;
 		else return -1;
 #endif
+        return -1;
 }
 
 int i8910tuning::vivaz_slot()
@@ -338,6 +363,7 @@ int i8910tuning::vivaz_slot()
 	if (codec.copy("C:/System/Data/jpegenc_sn.dll64P")) return 0;
 		else return -1;
 #endif
+        return -1;
 }
 
 int i8910tuning::n900_slot()
@@ -350,6 +376,7 @@ int i8910tuning::n900_slot()
 	if (codec.copy("C:/System/Data/jpegenc_sn.dll64P")) return 0;
 		else return -1;
 #endif
+        return -1;
 }
 
 int i8910tuning::devplat_slot()
@@ -362,6 +389,7 @@ int i8910tuning::devplat_slot()
 	if (codec.copy("C:/System/Data/jpegenc_sn.dll64P")) return 0;
 		else return -1;
 #endif
+        return -1;
 }
 
 int i8910tuning::droidx_slot()
@@ -374,6 +402,7 @@ int i8910tuning::droidx_slot()
 	if (codec.copy("C:/System/Data/jpegenc_sn.dll64P")) return 0;
 		else return -1;
 #endif
+        return -1;
 }
 
 int i8910tuning::palm_slot()
@@ -386,6 +415,7 @@ int i8910tuning::palm_slot()
 	if (codec.copy("C:/System/Data/jpegenc_sn.dll64P")) return 0;
 		else return -1;
 #endif
+        return -1;
 }
 
 int i8910tuning::i8510_slot()
@@ -398,6 +428,7 @@ int i8910tuning::i8510_slot()
 	if (codec.copy("C:/System/Data/jpegenc_sn.dll64P")) return 0;
 		else return -1;
 #endif
+        return -1;
 }
 
 int i8910tuning::i8910_slot()
@@ -410,6 +441,7 @@ int i8910tuning::i8910_slot()
 	if (codec.copy("C:/System/Data/jpegenc_sn.dll64P")) return 0;
 		else return -1;
 #endif
+        return -1;
 }
 
 int i8910tuning::inUseJpeg()
@@ -494,9 +526,10 @@ int i8910tuning::inUseJpeg()
                         }
                 }
 #endif
+        return 0;
 }
 
-int i8910tuning::inUseUA()
+/*int i8910tuning::inUseUA()
 {
 #ifdef Q_OS_SYMBIAN
                 QFile UA("C:/Private/10202BE9/persists/101F8731.cre");
@@ -527,7 +560,60 @@ int i8910tuning::inUseUA()
 
         return -1;
 #endif
+        return 0;
+}*/
+
+/*
+  I8910 --------> Mozilla/5.0 (SymbianOS/9.4; U; Series60/5.0 Samsung/I8910; Profile/MIDP-2.1 Configuration/CLDC-1.1 ) AppleWebKit/525 (KHTML, like Gecko) Version/3.0 Safari/525
+  C6 v20--------> Mozilla/5.0 (SymbianOS/9.4; Series60/5.0 NokiaC6-00/20.0.043; Profile/MIDP-2.1 Configuration/CLDC-1.1) AppleWebKit/525 (KHTML, like Gecko) BrowserNG/7.2.6.9
+  5800 v52------> Mozilla/5.0 (SymbianOS/9.4; U; Series60/5.0 Nokia5800d-1/52.0.007; Profile/MIDP-2.1 Configuration/CLDC-1.1 ) AppleWebKit/413 (KHTML, like Gecko) Safari/413
+  Vivaz --------> SonyEricssonU5i/R2AA; Mozilla/5.0 (SymbianOS/9.4; U; Series60/5.0 Profile/MIDP-2.1 Configuration/CLDC-1.1) AppleWebKit/525 (KHTML, like Gecko) Version/3.0 Safari/525
+  Desktop ------> Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/534.30 (KHTML, like Gecko) Chrome/12.0.742.112 Safari/534.30
+  iPhone 4.3.3 -> Mozilla/5.0 (iPhone; U; CPU iPhone OS 4_3_3 like Mac OS X; en-us) AppleWebKit/533.17.9 (KHTML, like Gecko) Version/5.0.2 Mobile/8J2 Safari/6533.18.5
+  Galaxy S2 ----> Mozilla/5.0 (Linux; U; Android 2.3.3; es-us; GT-I9100 Build/GINGERBREAD) AppleWebKit/533.1 (KHTML, like Gecko) Version/4.0 Mobile Safari/533.1
+*/
+int i8910tuning::inUseUA()
+{
+#ifdef Q_OS_SYMBIAN
+    QString val;
+    QString i8910("Mozilla/5.0 (SymbianOS/9.4; U; Series60/5.0 Samsung/I8910; Profile/MIDP-2.1 Configuration/CLDC-1.1 ) AppleWebKit/525 (KHTML, like Gecko) Version/3.0 Safari/525");
+    QString ua_5800("Mozilla/5.0 (SymbianOS/9.4; U; Series60/5.0 Nokia5800d-1/52.0.007; Profile/MIDP-2.1 Configuration/CLDC-1.1 ) AppleWebKit/413 (KHTML, like Gecko) Safari/413");
+    QString C6("Mozilla/5.0 (SymbianOS/9.4; Series60/5.0 NokiaC6-00/20.0.043; Profile/MIDP-2.1 Configuration/CLDC-1.1) AppleWebKit/525 (KHTML, like Gecko) BrowserNG/7.2.6.9");
+    QString desktop("Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/534.30 (KHTML, like Gecko) Chrome/12.0.742.112 Safari/534.30");
+    QString vivaz("SonyEricssonU5i/R2AA; Mozilla/5.0 (SymbianOS/9.4; U; Series60/5.0 Profile/MIDP-2.1 Configuration/CLDC-1.1) AppleWebKit/525 (KHTML, like Gecko) Version/3.0 Safari/525");
+    QString galaxys2("Mozilla/5.0 (Linux; U; Android 2.3.3; es-us; GT-I9100 Build/GINGERBREAD) AppleWebKit/533.1 (KHTML, like Gecko) Version/4.0 Mobile Safari/533.1");
+    QString iphone("Mozilla/5.0 (iPhone; U; CPU iPhone OS 4_3_3 like Mac OS X; en-us) AppleWebKit/533.17.9 (KHTML, like Gecko) Version/5.0.2 Mobile/8J2 Safari/6533.18.5");
+    TInt error;
+    static const TUid repository = { 0x101F8731 };
+    const TUint32 key = 0x4;
+    error = ReadValStr(repository, key, &val);
+
+            if (!val.compare(i8910)) return 2;
+            else {
+                if (!val.compare(ua_5800)) return 3;
+                else {
+                    if (!val.compare(vivaz)) return 4;
+                    else {
+                        if (!val.compare(C6)) return 5;
+                        else {
+                            if (!val.compare(desktop)) return 6;
+                            else {
+                                if (!val.compare(iphone)) return 7;
+                                else {
+                                    if (!val.compare(galaxys2)) return 8;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+
+
+        return -1;
+#endif
+        return 0;
 }
+
 
 int i8910tuning::inUseFWID()
         {
@@ -584,6 +670,7 @@ int i8910tuning::inUseFWID()
 
         return -2;
 #endif
+        return 0;
 }
 
 void i8910tuning::deleteEmptyCamera(const QString &folder)
@@ -630,18 +717,21 @@ int i8910tuning::deleteGalleryCache(const QString &folder)
         }
         return 0;
 #endif
+        return 0;
 }
 
 int i8910tuning::deleteGalleryCache_slot()
 {
 #ifdef Q_OS_SYMBIAN
-    if (QDir("C:/Private/101f8857/cache").exists() &&  deleteGalleryCache("C:/Private/101f8857/cache")) return -1;
+
+    if (QDir("C:/Private/101f8857/cache").exists() && deleteGalleryCache("C:/Private/101f8857/cache")) return -1;
     if (QDir("E:/Private/101f8857/cache").exists() && deleteGalleryCache("E:/Private/101f8857/cache")) return -1;
     if (QDir("F:/Private/101f8857/cache").exists() && deleteGalleryCache("F:/Private/101f8857/cache")) return -1;
     return 0;
 #endif
+    return -1;
 }
-
+/*
 int i8910tuning::changeUA_5800()
 {
 #ifdef Q_OS_SYMBIAN
@@ -652,6 +742,7 @@ int i8910tuning::changeUA_5800()
     if (newUA.copy("C:/Private/10202BE9/persists/101F8731.cre")) return 0;
             else return -1;
 #endif
+    return 0;
 }
 
 int i8910tuning::changeUA_C6()
@@ -664,6 +755,7 @@ int i8910tuning::changeUA_C6()
     if (newUA.copy("C:/Private/10202BE9/persists/101F8731.cre")) return 0;
             else return -1;
 #endif
+    return 0;
 }
 
 int i8910tuning::changeUA_N8()
@@ -676,6 +768,7 @@ int i8910tuning::changeUA_N8()
     if (newUA.copy("C:/Private/10202BE9/persists/101F8731.cre")) return 0;
             else return -1;
 #endif
+    return 0;
 }
 
 int i8910tuning::changeUA_vivaz()
@@ -688,6 +781,7 @@ int i8910tuning::changeUA_vivaz()
     if (newUA.copy("C:/Private/10202BE9/persists/101F8731.cre")) return 0;
             else return -1;
 #endif
+    return 0;
 }
 
 int i8910tuning::changeUA_I8910()
@@ -700,8 +794,146 @@ int i8910tuning::changeUA_I8910()
     if (newUA.copy("C:/Private/10202BE9/persists/101F8731.cre")) return 0;
             else return -1;
 #endif
+    return 0;
+}
+*/
+
+/*
+  I8910 --------> Mozilla/5.0 (SymbianOS/9.4; U; Series60/5.0 Samsung/I8910; Profile/MIDP-2.1 Configuration/CLDC-1.1 ) AppleWebKit/525 (KHTML, like Gecko) Version/3.0 Safari/525
+  C6 v20--------> Mozilla/5.0 (SymbianOS/9.4; Series60/5.0 NokiaC6-00/20.0.043; Profile/MIDP-2.1 Configuration/CLDC-1.1) AppleWebKit/525 (KHTML, like Gecko) BrowserNG/7.2.6.9
+  5800 v52------> Mozilla/5.0 (SymbianOS/9.4; U; Series60/5.0 Nokia5800d-1/52.0.007; Profile/MIDP-2.1 Configuration/CLDC-1.1 ) AppleWebKit/413 (KHTML, like Gecko) Safari/413
+  Vivaz --------> SonyEricssonU5i/R2AA; Mozilla/5.0 (SymbianOS/9.4; U; Series60/5.0 Profile/MIDP-2.1 Configuration/CLDC-1.1) AppleWebKit/525 (KHTML, like Gecko) Version/3.0 Safari/525
+  Desktop ------> Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/534.30 (KHTML, like Gecko) Chrome/12.0.742.112 Safari/534.30
+  iPhone 4.3.3 -> Mozilla/5.0 (iPhone; U; CPU iPhone OS 4_3_3 like Mac OS X; en-us) AppleWebKit/533.17.9 (KHTML, like Gecko) Version/5.0.2 Mobile/8J2 Safari/6533.18.5
+  Galaxy S2 ----> Mozilla/5.0 (Linux; U; Android 2.3.3; es-us; GT-I9100 Build/GINGERBREAD) AppleWebKit/533.1 (KHTML, like Gecko) Version/4.0 Mobile Safari/533.1
+*/
+int i8910tuning::changeUA_5800()
+{
+#ifdef Q_OS_SYMBIAN
+        QString val;
+        QString UA("Mozilla/5.0 (SymbianOS/9.4; U; Series60/5.0 Nokia5800d-1/52.0.007; Profile/MIDP-2.1 Configuration/CLDC-1.1 ) AppleWebKit/413 (KHTML, like Gecko) Safari/413");
+        TInt error;
+        static const TUid repository = { 0x101F8731 };
+        const TUint32 key = 0x4;
+        error = ChangeValStr( repository, key, UA);
+        error = ReadValStr(repository, key, &val);
+
+        return UA.compare(val);
+#endif
+    return -1;
 }
 
+int i8910tuning::changeUA_C6()
+{
+#ifdef Q_OS_SYMBIAN
+        QString val;
+        QString UA("Mozilla/5.0 (SymbianOS/9.4; Series60/5.0 NokiaC6-00/20.0.043; Profile/MIDP-2.1 Configuration/CLDC-1.1) AppleWebKit/525 (KHTML, like Gecko) BrowserNG/7.2.6.9");
+        TInt error;
+        static const TUid repository = { 0x101F8731 };
+        const TUint32 key = 0x4;
+        error = ChangeValStr( repository, key, UA);
+        error = ReadValStr(repository, key, &val);
+
+        return UA.compare(val);
+#endif
+    return -1;
+}
+
+int i8910tuning::changeUA_N8()
+{
+#ifdef Q_OS_SYMBIAN
+        QString val;
+        QString UA("Mozilla/5.0 (SymbianOS/9.4; U; Series60/5.0 Nokia5800d-1/52.0.007; Profile/MIDP-2.1 Configuration/CLDC-1.1 ) AppleWebKit/413 (KHTML, like Gecko) Safari/413");
+        TInt error;
+        static const TUid repository = { 0x101F8731 };
+        const TUint32 key = 0x4;
+        error = ChangeValStr( repository, key, UA);
+        error = ReadValStr(repository, key, &val);
+
+        return UA.compare(val);
+#endif
+    return -1;
+}
+
+int i8910tuning::changeUA_vivaz()
+{
+#ifdef Q_OS_SYMBIAN
+        QString val;
+        QString UA("SonyEricssonU5i/R2AA; Mozilla/5.0 (SymbianOS/9.4; U; Series60/5.0 Profile/MIDP-2.1 Configuration/CLDC-1.1) AppleWebKit/525 (KHTML, like Gecko) Version/3.0 Safari/525");
+        TInt error;
+        static const TUid repository = { 0x101F8731 };
+        const TUint32 key = 0x4;
+        error = ChangeValStr( repository, key, UA);
+        error = ReadValStr(repository, key, &val);
+
+        return UA.compare(val);
+#endif
+    return -1;
+}
+
+int i8910tuning::changeUA_I8910()
+{
+#ifdef Q_OS_SYMBIAN
+        QString val;
+        QString UA("Mozilla/5.0 (SymbianOS/9.4; U; Series60/5.0 Samsung/I8910; Profile/MIDP-2.1 Configuration/CLDC-1.1 ) AppleWebKit/525 (KHTML, like Gecko) Version/3.0 Safari/525");
+        TInt error;
+        static const TUid repository = { 0x101F8731 };
+        const TUint32 key = 0x4;
+        error = ChangeValStr( repository, key, UA);
+        error = ReadValStr(repository, key, &val);
+
+        return UA.compare(val);
+#endif
+    return -1;
+}
+
+int i8910tuning::changeUA_iPhone()
+{
+#ifdef Q_OS_SYMBIAN
+        QString val;
+        QString UA("Mozilla/5.0 (iPhone; U; CPU iPhone OS 4_3_3 like Mac OS X; en-us) AppleWebKit/533.17.9 (KHTML, like Gecko) Version/5.0.2 Mobile/8J2 Safari/6533.18.5");
+        TInt error;
+        static const TUid repository = { 0x101F8731 };
+        const TUint32 key = 0x4;
+        error = ChangeValStr( repository, key, UA);
+        error = ReadValStr(repository, key, &val);
+
+        return UA.compare(val);
+#endif
+    return -1;
+}
+
+int i8910tuning::changeUA_desktop()
+{
+#ifdef Q_OS_SYMBIAN
+        QString val;
+        QString UA("Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/534.30 (KHTML, like Gecko) Chrome/12.0.742.112 Safari/534.30");
+        TInt error;
+        static const TUid repository = { 0x101F8731 };
+        const TUint32 key = 0x4;
+        error = ChangeValStr( repository, key, UA);
+        error = ReadValStr(repository, key, &val);
+
+        return UA.compare(val);
+#endif
+    return -1;
+}
+
+int i8910tuning::changeUA_android()
+{
+#ifdef Q_OS_SYMBIAN
+        QString val;
+        QString UA("Mozilla/5.0 (Linux; U; Android 2.3.3; es-us; GT-I9100 Build/GINGERBREAD) AppleWebKit/533.1 (KHTML, like Gecko) Version/4.0 Mobile Safari/533.1");
+        TInt error;
+        static const TUid repository = { 0x101F8731 };
+        const TUint32 key = 0x4;
+        error = ChangeValStr( repository, key, UA);
+        error = ReadValStr(repository, key, &val);
+
+        return UA.compare(val);
+#endif
+    return -1;
+}
 int i8910tuning::changeFW_I8910()
 {
 #ifdef Q_OS_SYMBIAN
@@ -743,6 +975,7 @@ int i8910tuning::changeFW_I8910()
     if (!(sw.copy("C:/resource/versions/sw.txt"))) return -1;
     else return 0;
 #endif
+    return -1;
 }
 
 /*int i8910tuning::changeFW_I8910()
@@ -857,6 +1090,7 @@ int i8910tuning::changeFW_N8()
     if (!(sw.copy("C:/resource/versions/sw.txt"))) return -1;
     else return 0;
 #endif
+    return -1;
 }
 
 
@@ -909,6 +1143,7 @@ int i8910tuning::changeFW_vivaz()
     if (!(sw.copy("C:/resource/versions/sw.txt"))) return -1;
     else return 0;
 #endif
+    return -1;
 }
 
 int i8910tuning::changeFW_5800()
@@ -966,6 +1201,7 @@ int i8910tuning::changeFW_5800()
     if (!(sw.copy("C:/resource/versions/sw.txt"))) return -1;
     else return 0;
 #endif
+    return -1;
 }
 
 
@@ -1025,6 +1261,7 @@ int i8910tuning::changeFW_C6()
     if (!(sw.copy("C:/resource/versions/sw.txt"))) return -1;
     else return 0;
 #endif
+    return -1;
 }
 
 /* KINETIC SCROLLING VALUES DESCRIPTION
@@ -1147,6 +1384,23 @@ int i8910tuning::setks_slot(int x1, int x2, int x3, int x4, int x5, int x6, int 
         if (somethingwrong) return -1;
         else return 0;
 #endif
+        return -1;
+}
+
+int i8910tuning::defaultks_slot()
+{
+#ifdef Q_OS_SYMBIAN
+
+    QFile ksfile("C:/private/10202BE9/persists/20021192.cre");
+    QFile ksfile2("C:/private/10202BE9/persists/20021192.txt");
+    QFile ksfile3("C:/private/10202BE9/20021192.txt");
+
+    if (ksfile.exists()) {if (!ksfile.remove()) return -1;}
+    if (ksfile2.exists()) {if (!ksfile2.remove()) return -1;}
+    if (ksfile3.exists()) {if (!ksfile3.remove()) return -1;}
+    return 0;
+#endif
+    return -1;
 }
 
 QVariantList i8910tuning::getks_slot()
@@ -1281,6 +1535,7 @@ int i8910tuning::createOCPatch(int min, int medium, int max)
         /*powerdll.close();*/
         return 0;
 #endif
+        return -1;
 }
 
 QByteArray i8910tuning::toLE(int value)
@@ -1300,6 +1555,7 @@ QByteArray i8910tuning::toLE(int value)
 
     return bella.toHex();
 #endif
+    return NULL;
 }
 
 
@@ -1416,8 +1672,11 @@ int i8910tuning::changeMicSens_slot(int valueMicAmp, int valueChannel)
 
     key.iCode = EKeyDevice1;
     key.iScanCode = EStdKeyDevice1;
+
     task.SendKey(key);
+
     task.SendKey(key);
+
     task.SendKey(key);
 
     //NOW I'M IN MAIN MENU, TIME TO HIT BACKUP
@@ -1426,12 +1685,18 @@ int i8910tuning::changeMicSens_slot(int valueMicAmp, int valueChannel)
     key.iScanCode = 0;
     task.SendKey(key);
 
-    key.iCode = EKeyDevice1;
-    key.iScanCode = EStdKeyDevice1;
+    key.iCode = EKeyDevice3;
+    key.iScanCode = EStdKeyDevice3;
     task.SendKey(key);
 
-#endif
+    key.iCode = EKeyDevice1;
+    key.iScanCode = EStdKeyDevice1;
+    User::After(200000);
+    task.SendKey(key);
 
+    return 0;
+#endif
+    return -1;
 }
 
 #ifdef Q_OS_SYMBIAN
@@ -1661,6 +1926,7 @@ int i8910tuning::enableDynamic_slot()
     task.SendKey(key);
     return 0;
 #endif
+    return -1;
 }
 
 
@@ -1732,6 +1998,7 @@ int i8910tuning::enableLocked_slot()
 
     return 0;
 #endif
+    return -1;
 }
 int i8910tuning::changeClockMode_slot(int mode)
 {
@@ -1883,6 +2150,7 @@ int i8910tuning::changeClockMode_slot(int mode)
     return 0;
 
 #endif
+    return -1;
 }
 
 int i8910tuning::getClockValue_slot()
@@ -1893,6 +2161,7 @@ int i8910tuning::getClockValue_slot()
     HAL::Get( HALData::ECPUSpeed, cpuSpeed );
     return cpuSpeed;
 #endif
+    return 0;
 
 }
 
@@ -1919,6 +2188,21 @@ int i8910tuning::dimlight_slot()
     }
     return 0;
 #endif
+    return -1;
+}
+
+int i8910tuning::getDimLight_slot()
+{
+#ifdef Q_OS_SYMBIAN
+    TInt val;
+    static const TUid repository = { 0x10200C8C };
+    const TUint32 key = 0x1;
+    val = ReadValInt(repository, key);
+
+    if (val == 0) return 1;
+    else return 0;
+#endif
+    return 0;
 }
 
 int i8910tuning::callSummary_slot()
@@ -1944,6 +2228,7 @@ int i8910tuning::callSummary_slot()
     }
     return 0;
 #endif
+    return -1;
 }
 
 int i8910tuning::getcallSummary_slot()
@@ -1956,7 +2241,51 @@ int i8910tuning::getcallSummary_slot()
 
     return val;
 #endif
+    return 0;
 }
+
+int i8910tuning::getWDR_slot()
+{
+#ifdef Q_OS_SYMBIAN
+
+    TInt val;
+    static const TUid repository = { 0x101F8808 };
+    const TUint32 key = 0x17;
+    val = ReadValInt(repository, key);
+
+    //*log2 << QString::number(val) + " returned by getWDR_slot\n";
+    return val;
+#endif
+    return 0;
+}
+
+int i8910tuning::wdr_slot()
+{
+#ifdef Q_OS_SYMBIAN
+    QFile wdr("C:/private/10202BE9/persists/101F8808.cre");
+    QFile wdrtxt("C:/private/10202BE9/persists/101F8808.txt");
+    QFile wdron("E:/data/SymbianTuning/wdr/on.txt");
+    TInt val;
+    val = getWDR_slot();
+
+    if (val==0)
+    {
+        if (wdr.exists()) wdr.remove();
+        if (wdrtxt.exists()) wdrtxt.remove();
+        if (!wdron.copy("C:/private/10202BE9/persists/101F8808.txt")) return -1;
+    }
+    else
+    {
+        if (wdrtxt.exists()) wdrtxt.remove();
+        if (wdr.exists()) wdr.remove();
+    }
+    //*log2 <<  QString::number(val)+" returned by wdrslot called\n";
+    return 0;
+#endif
+    return -1;
+}
+
+
 
 int i8910tuning::startL(QString path)
 {
@@ -1981,6 +2310,7 @@ int i8910tuning::startL(QString path)
     CleanupStack::PopAndDestroy(cl);
     CleanupStack::PopAndDestroy(&lsSession);
 #endif
+    return -1;
 }
 
 
@@ -1994,7 +2324,7 @@ void i8910tuning::startcamera_slot()
 
 void i8910tuning::exit_slot()
 {
-	exit(0);
+        exit(0);
 }
 
 i8910tuning::~i8910tuning()

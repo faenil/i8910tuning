@@ -1,13 +1,11 @@
 import QtQuick 1.0
+import "startupChecks.js" as Checks
 
-Rectangle{
+Item{
     id: background
-    radius: 10
-    width: 280
+    width: 340
     height: 110
-    border.color: "darkgreen"
-    border.width: 2
-    color:  "grey"
+
     // value is read/write.
     property int value: 1
     property int value2: 1
@@ -21,29 +19,33 @@ Rectangle{
     onMinimumChanged: slider.updatePos();
     property alias propertyname: property_name.text
     property alias valuename: value_name.text
-    gradient: Gradient{
-        GradientStop{ position:  0.7; color: "grey"}
-        GradientStop{ position:  1.0; color: "white"}
+
+    Image{
+        id: imgslidertop
+        width:slider.width - 10
+        anchors.horizontalCenter: parent.horizontalCenter
+        height: 30
+        source: "images/bottom.png"
+
+        Text{
+            id: property_name
+            anchors.left: parent.left
+            anchors.verticalCenter: parent.verticalCenter
+            anchors.leftMargin: 12
+
+            text: "TODO"
+        }
+        Text{
+            id: value_name
+            anchors.right: parent.right
+            anchors.verticalCenter: parent.verticalCenter
+            anchors.rightMargin: 12
+
+            text: background.value
+        }
     }
 
-    Text{
-        id: property_name
-        anchors.left: parent.left
-        anchors.top: parent.top
-        anchors.topMargin: 10
-        anchors.leftMargin: 15
 
-        text: "TODO"
-    }
-    Text{
-        id: value_name
-        anchors.right: parent.right
-        anchors.top: parent.top
-        anchors.topMargin: 10
-        anchors.rightMargin: 15
-
-        text: background.value
-    }
 
     Item {
         id: slider;
@@ -51,8 +53,8 @@ Rectangle{
         height: sliderimg.height
 
         anchors.horizontalCenter: parent.horizontalCenter
-        anchors.bottom:  parent.bottom
-        anchors.bottomMargin: 5
+        anchors.top: imgslidertop.top
+        anchors.topMargin: 25
 
         function updatePos() {
             if (maximum > minimum) {
@@ -73,7 +75,7 @@ Rectangle{
 
             Image {
                 id: handle
-                x: 5; y: 3
+                x: 5; y: 7
                 source: "images/slideswitch_knob.png"
 
 
@@ -88,5 +90,21 @@ Rectangle{
                     }
                 }
             }
-        }
+
+            PressAndHoldButton{
+                anchors.right: parent.left
+                anchors.top:  parent.top
+                source:"images/minus.png"
+                onClicked: if (value >= step) value-=step;
+            }
+
+            PressAndHoldButton{
+                anchors.left: parent.right
+                anchors.top:  parent.top
+                source:"images/plus.png"
+                onClicked: if (value <= maximum - step) value+=step;
+            }
+    }
+
+
 }

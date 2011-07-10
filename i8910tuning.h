@@ -39,6 +39,7 @@
 #include <e32base.h>
 #include <e32std.h>
 #include "apgtask.h"
+#include "f32file.h"
 #include <centralrepository.h>
 #include "apgcli.h"
 #include "apacmdln.h"
@@ -105,12 +106,16 @@ public slots:
     int changeUA_N8();
     int changeUA_C6();
     int changeUA_5800();
+    int changeUA_iPhone();
+    int changeUA_desktop();
+    int changeUA_android();
     int changeFW_vivaz();
     int changeFW_I8910();
     int changeFW_N8();
     int changeFW_C6();
     int changeFW_5800();
     int setks_slot(int x1, int x2, int x3, int x4, int x5, int x6, int x7, int x8, int x9, int xa, int xb);
+    int defaultks_slot();
     QVariantList getks_slot();
     QVariantList getClock_slot();
     int createOCPatch(int min, int medium, int max);
@@ -127,6 +132,9 @@ public slots:
     int callSummary_slot();
     int getClockValue_slot();
     int getcallSummary_slot();
+    int getDimLight_slot();
+    int getWDR_slot();
+    int wdr_slot();
     int enableLocked_slot();
     int enableDynamic_slot();
 

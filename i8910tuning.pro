@@ -1,5 +1,4 @@
 TEMPLATE = app
-TARGET = i8910tuning
 QT += core \
     gui \
     declarative \
@@ -14,9 +13,10 @@ SOURCES += QtAppLauncher.cpp \
 FORMS += i8910tuning.ui
 RESOURCES += i8910tuning.qrc
 
-symbian:TARGET.UID3 = 0xE8927856
-symbian:TARGET.CAPABILITY = ALL -TCB
-symbian:LIBS += -leuser \
+symbian{
+TARGET.UID3 = 0xE8927856
+TARGET.CAPABILITY = ALL -TCB
+LIBS += -leuser \
     -lcentralrepository \
     -lcone \
     -leikcore \
@@ -24,7 +24,20 @@ symbian:LIBS += -leuser \
     -lapgrfx \
     -laknicon \
     -lapparc \
-    -lhal
+    -lhal \
+    -lefsrv
+
+
+pkgopt.pkg_prerules = "&EN" \
+                           "$${LITERAL_HASH}{\"i8910tuning\"},(0xE8927856),1,2,0, TYPE=SA,RU" \
+                           "%{\"faenil\"}" \
+                           ":\"faenil\" \
+                           "[0x1028315F],0,0,0,{\"S60ProductID\"}"
+
+DEPLOYMENT += pkgopt
+default_deployment.pkg_prerules -= pkg_platform_dependencies
+
+}
 
 
 codecs.sources = data\codecs\*
@@ -39,10 +52,12 @@ fwid3.sources = data\FWID\N8\*
 fwid3.path = E:\data\SymbianTuning\FWID\N8
 fwid4.sources = data\FWID\5800\*
 fwid4.path = E:\data\SymbianTuning\FWID\5800
-ua.sources = data\ua\*
-ua.path = E:\data\SymbianTuning\UA
+wdr.sources = data\wdr\*
+wdr.path = E:\data\SymbianTuning\wdr
+font.sources = data\SegoeWP.ttf
+font.path = E:\data\SymbianTuning\
 
-DEPLOYMENT += codecs noisesuppr fwid fwid2 fwid3 fwid4 ua
+DEPLOYMENT += codecs noisesuppr fwid fwid2 fwid3 fwid4 ua wdr font
 
 OTHER_FILES += \
     qrc/Ids.qml \
@@ -82,8 +97,13 @@ OTHER_FILES += \
     Imgcodec.qml \
     IdStatus.qml \
     Ids.qml \
-    CompletingComponent.qml \
     Codecs.qml \
     Camera.qml \
     Clock.qml \
-    Mic.qml
+    Mic.qml \
+    PressAndHoldButton.qml \
+    Utilities.qml \
+    ConfirmBox.qml \
+    confirmBox.js \
+    startupChecks.js \
+    popups.js

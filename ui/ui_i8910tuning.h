@@ -1,8 +1,8 @@
 /********************************************************************************
 ** Form generated from reading UI file 'i8910tuning.ui'
 **
-** Created: Wed 9. Mar 23:25:22 2011
-**      by: Qt User Interface Compiler version 4.7.1
+** Created: Mon 4. Jul 17:17:47 2011
+**      by: Qt User Interface Compiler version 4.7.3
 **
 ** WARNING! All changes made in this file will be lost when recompiling UI file!
 ********************************************************************************/

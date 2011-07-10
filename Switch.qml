@@ -40,7 +40,7 @@
 
  import QtQuick 1.0
 
- Item {
+Item {
      id: toggleswitch
      width: background.width; height: background.height
 
@@ -48,14 +48,17 @@
      property alias opt2: textopt2.text
 	 property alias centreText: textopt3.text
      property bool on: false
-
+     property int minpixel: 5
+     property int maxpixel: 156
+     property alias knob_x:knob.x
 
 
      function releaseSwitch() {
-         if (knob.x == 5) {
+         if (knob.x == minpixel) {
              if (toggleswitch.state == "off") return;
+
          }
-         if (knob.x == 165) {
+         if (knob.x == maxpixel) {
              if (toggleswitch.state == "on") return;
          }
          toggle();
@@ -69,12 +72,12 @@
 
      Text{
 	id: textopt1     
-	anchors {left: background.left; verticalCenter: background.verticalCenter; leftMargin: 35}
+        anchors {left: background.left; verticalCenter: background.verticalCenter; leftMargin: 25}
 	color: "lightgrey"
      }
      Text{
 	id: textopt2     
-	anchors {right: background.right; verticalCenter: background.verticalCenter; rightMargin: 35}
+        anchors {right: background.right; verticalCenter: background.verticalCenter; rightMargin: 25}
 	color: "darkgrey"
      }
 
@@ -86,12 +89,12 @@
 
      Image {
          id: knob
-         x: 5; y:3
+         x: 5; y:7
          source: "images/slideswitch_knob.png"
 
          MouseArea {
              anchors.fill: parent
-             drag.target: knob; drag.axis: Drag.XAxis; drag.minimumX: 5; drag.maximumX: 165
+             drag.target: knob; drag.axis: Drag.XAxis; drag.minimumX: minpixel; drag.maximumX: maxpixel
              onClicked: toggle()
              onReleased: releaseSwitch()
          }
@@ -100,12 +103,12 @@
      states: [
          State {
              name: "on"
-             PropertyChanges { target: knob; x: 165 }
+             PropertyChanges { target: knob; x: maxpixel }
              PropertyChanges { target: toggleswitch; on: true }
          },
          State {
              name: "off"
-             PropertyChanges { target: knob; x: 5 }
+             PropertyChanges { target: knob; x: minpixel }
              PropertyChanges { target: toggleswitch; on: false }
          }
      ]

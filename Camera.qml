@@ -1,77 +1,30 @@
 import QtQuick 1.0
+import "startupChecks.js" as Checks
+import "popups.js" as Popups
 
 Rectangle{
 	id: camera
 	color:"transparent"
 	clip: true
         width: 360
-        height: 565
+        height: 640
+
+        Component.onCompleted: Checks.checkFocusAndWDRStartup()
+
+        property int mode: 0
+
 	Image{
         source: "images/background.png"
 	x:-360
 	fillMode: Image.Tile
 	}
 
-
-	function checkFocusStartup()
-	{
-		switch(i8910tuning.CheckPhotoFocus_slot()){
-		case 0:
-		photofocus.state = 'off'
-		break
-		case 1:
-		photofocus.state = 'on'
-		break
-		}
-
-		switch(i8910tuning.CheckVideoFocus_slot()){
-		case 0:
-		videofocus.state = 'off'
-		break
-		case 1:
-		videofocus.state = 'on'
-		break
-		}
-
-
-		switch(i8910tuning.checkSuppr_slot()){
-		case 0:
-		noisesuppr.state = 'on'
-		break
-		case 1:
-		noisesuppr.state = 'off'
-		break
-		case -1: 
-                noisesuppr.state = 'off'
-                break
-		}
-                return 0;
-	}
-
-
 	Column{
-	anchors.centerIn: parent
-	spacing: 15
-	
-	Image{
-	anchors.horizontalCenter: parent.horizontalCenter
-	width: 260
-	height: 75
-        source: "images/butt.png"
-	
-	Text{
-                anchors.centerIn:parent
-		text: "Delete cache"
-	}
-	
-		MouseArea{
-			id: cacheButt
-			anchors.fill: parent
-                        onClicked: {if (i8910tuning.deleteGalleryCache_slot()) {page.errbox.success = false; page.errmsg.text = "Could not delete gallery cache"; page.errbox.opacity = 0.9;}}
-                        onPressed: parent.source = "images/butt_pressed.png"
-                        onReleased: parent.source = "images/butt.png"
-		}
-	}
+        anchors.horizontalCenter: parent.horizontalCenter
+        anchors.top:  parent.top
+        anchors.topMargin: 75
+        spacing: 5
+
 	
 	Image{
         id:emptybutt
@@ -87,7 +40,20 @@ Rectangle{
 		MouseArea{
 			id: emptyfoldersButt
 			anchors.fill: parent
-                        onClicked: {i8910tuning.deleteEmptyCamera_slot(); page.errbox.success = true; page.errmsg.text = "Empty folders deleted!"; page.errbox.opacity = 1;}
+                        onClicked: {
+                            Popups.confirmcomp = Qt.createComponent("ConfirmBox.qml");
+                            Popups.confirmitem = Popups.confirmcomp.createObject(page)
+                            Popups.confirmitem.anchors.centerIn = page;
+                            Popups.confirmitem.title = "WARNING"
+                            Popups.confirmitem.msg = "Do you really want to delete empty folders created by camera application?"
+                            page.loadingRect.opacity=0.6;
+
+                            Popups.confirmitem.opacity = 1;
+                            page.disableMouseBack = true
+
+                            Popups.confirmitem.confirmed.connect(Popups.deleteCameraFolders)
+
+                        }
 		}
 
                 states: State {
@@ -96,24 +62,46 @@ Rectangle{
                 }
 	}
 	
-	Switch{ id: photofocus
-	        opt1: "AF"
-	        opt2: "PF"
-			centreText: "Photo"
+        Switch{ id: wdr
+                opt2: "OFF"
+                opt1: "ON"
+                centreText: "WDR"
+                anchors.horizontalCenter: parent.horizontalCenter
 
-		function toggle() {
-        		 if (photofocus.state == 'on'){
-			
-                                if (i8910tuning.PFphoto_slot() === 0) photofocus.state = 'off'
-                                else { page.errbox.success = false; page.errbox.opacity = 0.8; page.errmsg.text = "Could not set photo PF"}
-	         	}   
-		 	else{
-		
-                                if (i8910tuning.AFphoto_slot() === 1) photofocus.state = 'on'
-                                else { page.errbox.success = false; page.errbox.opacity = 0.8; page.errmsg.text = "Could not set photo AF"}
-	     	 
-			 }
-     		}
+                function toggle() {
+
+                    if (wdr.state == 'on'){
+                        if (i8910tuning.wdr_slot() === 0) { wdr.state = 'off'; page.loadingRect.opacity=0.7; page.forceexit.opacity = 1; page.forceexitmsg = "WDR Mode changed, i8910tuning will now close, and camera focus settings reset to default."}
+                        else { wdr.knob_x = wdr.maxpixel; Popups.showErrorBox("Could not set WDR to ALWAYS OFF")}
+                    }
+                    else{
+                        if (i8910tuning.wdr_slot() === 0) {wdr.state = 'on'; page.loadingRect.opacity=0.7; page.forceexit.opacity = 1;page.forceexitmsg = "WDR Mode changed, i8910tuning will now close, and camera focus settings reset to default."}
+                        else { wdr.knob_x = wdr.minpixel; Popups.showErrorBox("Could not set WDR to ALWAYS ON")}
+                    }
+
+                }
+
+        }
+
+	Switch{ id: photofocus
+            opt1: "AF"
+            opt2: "PF"
+            centreText: "Photo"
+            anchors.horizontalCenter: parent.horizontalCenter
+
+            function toggle() {
+                if (photofocus.state == 'on'){
+
+                    if (i8910tuning.PFphoto_slot() === 0) photofocus.state = 'off'
+                    else { photofocus.knob_x = photofocus.maxpixel; Popups.showErrorBox("Could not set photo PF")}
+                }
+                else{
+
+                    if (i8910tuning.AFphoto_slot() === 1) photofocus.state = 'on'
+                    else { photofocus.knob_x = photofocus.minpixel; Popups.showErrorBox("Could not set photo AF")}
+
+                }
+            }
 
 	}
 
@@ -121,17 +109,18 @@ Rectangle{
 		opt2: "PF" 
 		opt1: "AF"
 		centreText: "Video"
-	    	
+                anchors.horizontalCenter: parent.horizontalCenter
+
 		function toggle() {
         		 if (videofocus.state == 'on'){
 			
                                 if (i8910tuning.PFvideo_slot() === 0) videofocus.state = 'off'
-                                else { page.errbox.success = false; page.errbox.opacity = 0.8; page.errmsg.text = "Could not set video PF"}
+                                else { videofocus.knob_x = videofocus.maxpixel; Popups.showErrorBox("Could not set video PF")}
 	         	}   
 		 	else{
 		
                                 if (i8910tuning.AFvideo_slot() === 1) videofocus.state = 'on'
-                                else { page.errbox.success = false; page.errbox.opacity = 0.8; page.errmsg.text = "Could not set video AF"}
+                                else {videofocus.knob_x = videofocus.minpixel; Popups.showErrorBox("Could not set video AF")}
 	     	 
 			 }
      		}		
@@ -142,21 +131,21 @@ Rectangle{
 		opt1: "ON"
 		opt2: "OFF"
 		centreText: "NoiseSuppr"
+                anchors.horizontalCenter: parent.horizontalCenter
 
 		function toggle() {
         		 if (noisesuppr.state == 'on'){
 			
                                 if (i8910tuning.supprOFF_slot() === 0) noisesuppr.state = 'off'
-                                else { page.errbox.success = false; page.errbox.opacity = 0.8; page.errmsg.text = "Could not disable noise suppressor"}
+                                else {  noisesuppr.knob_x = noisesuppr.maxpixel; Popups.showErrorBox("Could not disable noise suppressor")}
 	         	}   
 		 	else{
 		
                                 if (i8910tuning.supprON_slot() === 0) noisesuppr.state = 'on'
-                                else { page.errbox.success = false; page.errbox.opacity = 0.8; page.errmsg.text = "Could not enable noise suppressor"}
+                                else {  noisesuppr.knob_x = noisesuppr.minpixel; Popups.showErrorBox("Could not enable noise suppressor")}
 	     	 
 			 }
      		}	
-
 	}
 
 	Image{
@@ -172,4 +161,6 @@ Rectangle{
 		}
 	}
    }
+
 }
+

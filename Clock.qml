@@ -1,41 +1,45 @@
 import QtQuick 1.0
+import "startupChecks.js" as Checks
+import "popups.js" as Popups
 
 Item{
         id: ocsettings
         clip: true
         width: 360
-        height: 565
+        height: 640
 
-        function getclock(){
-            var clockvalues = i8910tuning.getClock_slot()
-            min.value = clockvalues[0]
-            medium.value = clockvalues[1]
-            max.value = clockvalues[2]
+        Component.onCompleted: Checks.getclock()
+
+        function showLoader(){
+        page.loader.opacity = 1
+        page.loadingRect.opacity=0.7
+        disableMouseBackground.enabled = true
         }
+
+        signal set_dynamic_mode
 
         Image{
         source: "images/background.png"
-        x:-1080
+        x:-1440
         fillMode: Image.Tile
         }
 
         VisualItemModel{
             id: clockmodel
             Item{
-                width:360
+                width:parent.width
                 anchors.horizontalCenter: ocsettings.horizontalCenter
-                height: col.height + 20
+                height: col.height
 
             Column{
                 id: col
                 spacing: 5
                 anchors.top:  parent.top
-                anchors.topMargin: 20
                 anchors.horizontalCenter: parent.horizontalCenter
 
-                Slider{id:min; propertyname: "Minimum Frequency"; step: 10; minimum: 200; maximum: 900}
-                Slider{id:medium; propertyname: "Medium Frequency"; step: 10; minimum: 200; maximum: 900 }
-                Slider{id:max; propertyname: "Maximum Frequency"; step: 10; minimum: 200; maximum: 900}
+                Slider{id:min; anchors.horizontalCenter: parent.horizontalCenter; propertyname: "Minimum"; step: 10; minimum: 200; maximum: 900}
+                Slider{id:medium; anchors.horizontalCenter: parent.horizontalCenter; propertyname: "Medium"; step: 10; minimum: 200; maximum: 900 }
+                Slider{id:max; anchors.horizontalCenter: parent.horizontalCenter; propertyname: "Maximum"; step: 10; minimum: 200; maximum: 900}
                 /*Switch{ id: clockmode
                         anchors.horizontalCenter: parent.horizontalCenter
                         opt1: "Dynamic"
@@ -46,12 +50,12 @@ Item{
                                  if (clockmode.state == "off"){
 
                                      if (i8910tuning.changeClockMode_slot(1) === 0) clockmode.state = "on"
-                                     else { page.errbox.success = false; page.errbox.opacity = 0.8; page.errmsg.text = "Could not set Dynamic Clock mode"}
+                                     else { page.popuptitle = "ERROR"; page.popuptitleimg = "images/err.png"; page.errbox.opacity = 1; disableMouseBackground.enabled = true; page.errmsg.text = "Could not set Dynamic Clock mode"}
                                  }
                                  else{
 
                                      if (i8910tuning.changeClockMode_slot(0) === 0) clockmode.state = "off"
-                                     else { page.errbox.success = false; page.errbox.opacity = 0.8; page.errmsg.text = "Could not set Locked Clock mode"}
+                                     else { page.popuptitle = "ERROR"; page.popuptitleimg = "images/err.png"; page.errbox.opacity = 1; disableMouseBackground.enabled = true; page.errmsg.text = "Could not set Locked Clock mode"}
 
                                  }
                         }
@@ -73,18 +77,10 @@ Item{
                         id: dynamicButt
                         anchors.fill: parent
                         onClicked: {
-                            if (i8910tuning.changeClockMode_slot(1))
-                            {
-                                page.errbox.success = false;
-                                page.errmsg.text = "Could not change to DYNAMIC mode";
-                                page.errbox.opacity = 0.9;
-                            }
-                            else
-                            {
-                                page.errbox.success = true;
-                                page.errmsg.text = "Clock mode changed to DYNAMIC mode";
-                                page.errbox.opacity = 0.9;
-                            }
+
+                            showLoader()
+                            page.loadingTimerDynamic.start()
+
                         }
                     }
                     states: State {
@@ -103,25 +99,15 @@ Item{
 
                     Text{
                         anchors.centerIn:parent
-                        text: "Locked frequency"
+                        text: "Locked Frequency"
                     }
 
                     MouseArea{
                         id: lockedButt
                         anchors.fill: parent
                         onClicked: {
-                            if (i8910tuning.changeClockMode_slot(0))
-                            {
-                                page.errbox.success = false;
-                                page.errmsg.text = "Could not change to LOCKED mode";
-                                page.errbox.opacity = 0.9;
-                            }
-                            else
-                            {
-                                page.errbox.success = true;
-                                page.errmsg.text = "Clock mode changed to LOCKED mode";
-                                page.errbox.opacity = 0.9;
-                            }
+                            showLoader()
+                            page.loadingTimerLocked.start()
                         }
                     }
                     states: State {
@@ -147,24 +133,25 @@ Item{
                         id: applyButt
                         anchors.fill: parent
                         onClicked: {
+
+                            showLoader()
+
                             if (i8910tuning.createOCPatch(min.value, medium.value, max.value))
                             {
-                                page.errbox.success = false;
-                                page.errmsg.text = "Could not create Clock Patch";
-                                page.errbox.opacity = 0.9;
+                                page.loader.opacity = 0
+
+                                Popups.showErrorBox("Could not create Clock Patch");
+
                                 //Reset sliders' value to real values taken from power.dll
-                                getclock();
+                                Checks.getclock();
                             }
                             else
                             {
-                                i8910tuning.changeClockMode_slot(2);
-
-                                page.errbox.success = true;
-                                page.errmsg.text = "Clock Patch created. Now open RomPatcher+ and activate it";
-                                page.errbox.opacity = 0.9;
+                                page.loadingTimerSwitch.start()
                             }
                         }
                     }
+
                     states: State {
                         name: "pressed"; when: applyButt.pressed == true
                         PropertyChanges { target: applyimg; source: "images/butt_pressed.png" }
@@ -189,11 +176,17 @@ Item{
                     MouseArea{
                         id: clockButt
                         anchors.fill: parent
-                        onClicked: { parent.timer.start()}
+                        onClicked: { parent.timer.start(); showtimer.start()}
                     }
                     states: State {
                         name: "pressed"; when: clockButt.pressed == true
                         PropertyChanges { target: clockimg; source: "images/butt_pressed.png" }
+                    }
+
+                    Timer {
+                        id:showtimer
+                        interval: 7000; running: false; repeat: false
+                        onTriggered: {clocktimer.stop(); parent.txt = "Get Clock"}
                     }
 
                     Timer {
@@ -210,6 +203,8 @@ Item{
             ListView{
                 id: clocklist
                 anchors.fill: parent
+                anchors.bottomMargin: 75
+                anchors.topMargin: 75
                 model: clockmodel
                 orientation: ListView.Vertical
                 flickDeceleration: 1000

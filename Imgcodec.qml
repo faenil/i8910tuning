@@ -1,11 +1,10 @@
 import QtQuick 1.0
-Rectangle
+
+Item
 {
 id: imgrect
         width: 140; height: width+20
-	border.width: 3
-	border.color: "transparent"
-	color:"transparent"
+        //source:"images/cellbg.png"
 	property variant group
 	property alias path2: imgsel.source
 	property alias path: imgcodec.source
@@ -15,7 +14,7 @@ id: imgrect
 	
         Text{
             id: codecText
-            color: "black"
+            color: "white"
             anchors.horizontalCenter: parent.horizontalCenter
         }
 

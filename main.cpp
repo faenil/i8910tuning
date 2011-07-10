@@ -32,46 +32,85 @@
 
 #include <QtGui>
 #include <QApplication>
+#include <QSplashScreen>
+#include <QPixmap>
 
 #include <QDeclarativeView>
 #include <QDeclarativeContext>
+#include <QFont>
+#include <QFontDatabase>
 
-
- int main(int argc, char *argv[])
- {
-     QFile logfile2("C:/hxlog.txt");
-     QTextStream log2(&logfile2);
-     if (!logfile2.open(QIODevice::Append | QIODevice::WriteOnly)) return 1;
-
-     log2 << "file";
+int main(int argc, char *argv[])
+{
+    QFile logfile2("C:/hxlog.txt");
+    QTextStream log2(&logfile2);
+    if (!logfile2.open(QIODevice::Append | QIODevice::WriteOnly)) return 1;
 #ifdef Q_OS_SYMBIAN
-     QApplication::setGraphicsSystem("openvg");
+    QApplication::setGraphicsSystem("openvg");
 #endif
-     log2 << "graphics system";
-     QApplication app(argc, argv);
 
-     QDeclarativeView view;
-     view.rootContext()->setContextProperty("i8910tuning", new i8910tuning(0, &logfile2, &log2));
-     view.setSource(QUrl("qrc:/Page.qml"));
-
-     log2 << "dec view";
+    QApplication app(argc, argv);
 
 #ifdef Q_OS_SYMBIAN
-     CAknAppUi* appUi = dynamic_cast<CAknAppUi*> (CEikonEnv::Static()->AppUi());
-     TRAPD(error,
-     if (appUi) {
-         // Lock application orientation into landscape
-         appUi->SetOrientationL(CAknAppUi::EAppUiOrientationPortrait);
-     }
-     );
+
+    //LEAVES IF E: DRIVE IS BUSY (I.E. PHONE IS PLUGGED IN USB MASS STORAGE MODE)
+    RFs fsSession;
+    CleanupClosePushL(fsSession);
+    User::LeaveIfError(fsSession.Connect());
+    TVolumeInfo volumeInfo;
+    TInt err=fsSession.Volume(volumeInfo,EDriveE);
+    if (err==KErrNotReady)
+    {
+        fsSession.Close();
+        CleanupStack::PopAndDestroy();
+        QPixmap pixmap(":/images/exitsplash.png");
+        QSplashScreen splash(pixmap);
+        splash.showFullScreen();
+        User::After(5000000);
+        app.quit();
+    }
+    fsSession.Close();
+    CleanupStack::PopAndDestroy();
 #endif
- log2 << "locked portrait";
+
+    QPixmap pixmap(":/images/splashscreen.png");
+    QSplashScreen splash(pixmap);
+    splash.showFullScreen();
+
+
+    QFontDatabase fontdb;
+    int bella = fontdb.addApplicationFont("E:/data/SymbianTuning/SegoeWP.ttf");
+    qDebug() << QString::number(bella);
+    QFont fontnew = fontdb.font("Segoe WP", "Normal", 7);
+    app.setFont(fontnew);
+
+    QDeclarativeView view;
 #ifdef Q_OS_SYMBIAN
-     view.showFullScreen();
+    //view.setAttribute(Qt::WA_NoSystemBackground);
+#endif
+
+    view.rootContext()->setContextProperty("i8910tuning", new i8910tuning(0, &logfile2, &log2));
+    view.setSource(QUrl("qrc:/Page.qml"));
+
+    QObject::connect((QObject*)view.engine(), SIGNAL(quit()), &app, SLOT(quit()));
+
+
+#ifdef Q_OS_SYMBIAN
+    CAknAppUi* appUi = dynamic_cast<CAknAppUi*> (CEikonEnv::Static()->AppUi());
+    TRAPD(error,
+          if (appUi) {
+          // Lock application orientation into landscape
+          appUi->SetOrientationL(CAknAppUi::EAppUiOrientationPortrait);
+}
+);
+#endif
+#ifdef Q_OS_SYMBIAN
+view.showFullScreen();
 #else
-     view.show();
+view.show();
 #endif
 
-     return app.exec();
+splash.finish(&view);
+return app.exec();
 
- }
+}

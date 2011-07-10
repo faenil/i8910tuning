@@ -1,7 +1,7 @@
 /****************************************************************************
 ** Meta object code from reading C++ file 'i8910tuning.h'
 **
-** Created: Sat 11. Jun 02:25:37 2011
+** Created: Sun 10. Jul 11:10:12 2011
 **      by: The Qt Meta Object Compiler version 62 (Qt 4.7.3)
 **
 ** WARNING! All changes made in this file will be lost!
@@ -23,7 +23,7 @@ static const uint qt_meta_data_i8910tuning[] = {
        5,       // revision
        0,       // classname
        0,    0, // classinfo
-      54,   14, // methods
+      61,   14, // methods
        0,    0, // properties
        0,    0, // enums/sets
        0,    0, // constructors
@@ -61,32 +61,39 @@ static const uint qt_meta_data_i8910tuning[] = {
      445,   12,   13,   12, 0x0a,
      459,   12,   13,   12, 0x0a,
      475,   12,   13,   12, 0x0a,
-     492,   12,   13,   12, 0x0a,
-     509,   12,   13,   12, 0x0a,
-     523,   12,   13,   12, 0x0a,
-     537,   12,   13,   12, 0x0a,
-     586,  553,   13,   12, 0x0a,
-     655,   12,  642,   12, 0x0a,
-     668,   12,  642,   12, 0x0a,
-     699,  684,   13,   12, 0x0a,
-     751,  726,   13,   12, 0x0a,
-     790,  779,   12,   12, 0x0a,
-     817,  779,   12,   12, 0x0a,
-     845,  779,   12,   12, 0x0a,
-     870,   12,   13,   12, 0x0a,
-     891,  886,   13,   12, 0x0a,
-     922,  917,   13,   12, 0x0a,
-     938,   12,   13,   12, 0x0a,
-     957,   12,   13,   12, 0x0a,
-     978,   12,   13,   12, 0x0a,
-    1000,   12,   13,   12, 0x0a,
-    1020,   12,   13,   12, 0x0a,
+     493,   12,   13,   12, 0x0a,
+     512,   12,   13,   12, 0x0a,
+     531,   12,   13,   12, 0x0a,
+     548,   12,   13,   12, 0x0a,
+     565,   12,   13,   12, 0x0a,
+     579,   12,   13,   12, 0x0a,
+     593,   12,   13,   12, 0x0a,
+     642,  609,   13,   12, 0x0a,
+     698,   12,   13,   12, 0x0a,
+     728,   12,  715,   12, 0x0a,
+     741,   12,  715,   12, 0x0a,
+     772,  757,   13,   12, 0x0a,
+     824,  799,   13,   12, 0x0a,
+     863,  852,   12,   12, 0x0a,
+     890,  852,   12,   12, 0x0a,
+     918,  852,   12,   12, 0x0a,
+     943,   12,   13,   12, 0x0a,
+     964,  959,   13,   12, 0x0a,
+     995,  990,   13,   12, 0x0a,
+    1011,   12,   13,   12, 0x0a,
+    1030,   12,   13,   12, 0x0a,
+    1051,   12,   13,   12, 0x0a,
+    1073,   12,   13,   12, 0x0a,
+    1092,   12,   13,   12, 0x0a,
+    1106,   12,   13,   12, 0x0a,
+    1117,   12,   13,   12, 0x0a,
+    1137,   12,   13,   12, 0x0a,
 
  // methods: signature, parameters, type, tag, flags
-    1077, 1046, 1041,   12, 0x02,
-    1128, 1109, 1041,   12, 0x02,
-    1153, 1046, 1041,   12, 0x02,
-    1214, 1188, 1041,   12, 0x02,
+    1194, 1163, 1158,   12, 0x02,
+    1245, 1226, 1158,   12, 0x02,
+    1270, 1163, 1158,   12, 0x02,
+    1331, 1305, 1158,   12, 0x02,
 
        0        // eod
 };
@@ -106,11 +113,14 @@ static const char qt_meta_stringdata_i8910tuning[] = {
     "deleteGalleryCache_slot()\0changeUA_vivaz()\0"
     "changeUA_I8910()\0changeUA_N8()\0"
     "changeUA_C6()\0changeUA_5800()\0"
-    "changeFW_vivaz()\0changeFW_I8910()\0"
-    "changeFW_N8()\0changeFW_C6()\0changeFW_5800()\0"
+    "changeUA_iPhone()\0changeUA_desktop()\0"
+    "changeUA_android()\0changeFW_vivaz()\0"
+    "changeFW_I8910()\0changeFW_N8()\0"
+    "changeFW_C6()\0changeFW_5800()\0"
     "x1,x2,x3,x4,x5,x6,x7,x8,x9,xa,xb\0"
     "setks_slot(int,int,int,int,int,int,int,int,int,int,int)\0"
-    "QVariantList\0getks_slot()\0getClock_slot()\0"
+    "defaultks_slot()\0QVariantList\0"
+    "getks_slot()\0getClock_slot()\0"
     "min,medium,max\0createOCPatch(int,int,int)\0"
     "valueMicAmp,valueChannel\0"
     "changeMicSens_slot(int,int)\0value,task\0"
@@ -120,8 +130,10 @@ static const char qt_meta_stringdata_i8910tuning[] = {
     "mode\0changeClockMode_slot(int)\0path\0"
     "startL(QString)\0callSummary_slot()\0"
     "getClockValue_slot()\0getcallSummary_slot()\0"
-    "enableLocked_slot()\0enableDynamic_slot()\0"
-    "TInt\0KUidRepository,key,newkeyvalue\0"
+    "getDimLight_slot()\0getWDR_slot()\0"
+    "wdr_slot()\0enableLocked_slot()\0"
+    "enableDynamic_slot()\0TInt\0"
+    "KUidRepository,key,newkeyvalue\0"
     "ChangeValInt(TUid,TUint32,TInt)\0"
     "KUidRepository,key\0ReadValInt(TUid,TUint32)\0"
     "ChangeValStr(TUid,TUint32,QString)\0"
@@ -213,56 +225,70 @@ int i8910tuning::qt_metacall(QMetaObject::Call _c, int _id, void **_a)
             if (_a[0]) *reinterpret_cast< int*>(_a[0]) = _r; }  break;
         case 28: { int _r = changeUA_5800();
             if (_a[0]) *reinterpret_cast< int*>(_a[0]) = _r; }  break;
-        case 29: { int _r = changeFW_vivaz();
+        case 29: { int _r = changeUA_iPhone();
             if (_a[0]) *reinterpret_cast< int*>(_a[0]) = _r; }  break;
-        case 30: { int _r = changeFW_I8910();
+        case 30: { int _r = changeUA_desktop();
             if (_a[0]) *reinterpret_cast< int*>(_a[0]) = _r; }  break;
-        case 31: { int _r = changeFW_N8();
+        case 31: { int _r = changeUA_android();
             if (_a[0]) *reinterpret_cast< int*>(_a[0]) = _r; }  break;
-        case 32: { int _r = changeFW_C6();
+        case 32: { int _r = changeFW_vivaz();
             if (_a[0]) *reinterpret_cast< int*>(_a[0]) = _r; }  break;
-        case 33: { int _r = changeFW_5800();
+        case 33: { int _r = changeFW_I8910();
             if (_a[0]) *reinterpret_cast< int*>(_a[0]) = _r; }  break;
-        case 34: { int _r = setks_slot((*reinterpret_cast< int(*)>(_a[1])),(*reinterpret_cast< int(*)>(_a[2])),(*reinterpret_cast< int(*)>(_a[3])),(*reinterpret_cast< int(*)>(_a[4])),(*reinterpret_cast< int(*)>(_a[5])),(*reinterpret_cast< int(*)>(_a[6])),(*reinterpret_cast< int(*)>(_a[7])),(*reinterpret_cast< int(*)>(_a[8])),(*reinterpret_cast< int(*)>(_a[9])),(*reinterpret_cast< int(*)>(_a[10])),(*reinterpret_cast< int(*)>(_a[11])));
+        case 34: { int _r = changeFW_N8();
             if (_a[0]) *reinterpret_cast< int*>(_a[0]) = _r; }  break;
-        case 35: { QVariantList _r = getks_slot();
+        case 35: { int _r = changeFW_C6();
+            if (_a[0]) *reinterpret_cast< int*>(_a[0]) = _r; }  break;
+        case 36: { int _r = changeFW_5800();
+            if (_a[0]) *reinterpret_cast< int*>(_a[0]) = _r; }  break;
+        case 37: { int _r = setks_slot((*reinterpret_cast< int(*)>(_a[1])),(*reinterpret_cast< int(*)>(_a[2])),(*reinterpret_cast< int(*)>(_a[3])),(*reinterpret_cast< int(*)>(_a[4])),(*reinterpret_cast< int(*)>(_a[5])),(*reinterpret_cast< int(*)>(_a[6])),(*reinterpret_cast< int(*)>(_a[7])),(*reinterpret_cast< int(*)>(_a[8])),(*reinterpret_cast< int(*)>(_a[9])),(*reinterpret_cast< int(*)>(_a[10])),(*reinterpret_cast< int(*)>(_a[11])));
+            if (_a[0]) *reinterpret_cast< int*>(_a[0]) = _r; }  break;
+        case 38: { int _r = defaultks_slot();
+            if (_a[0]) *reinterpret_cast< int*>(_a[0]) = _r; }  break;
+        case 39: { QVariantList _r = getks_slot();
             if (_a[0]) *reinterpret_cast< QVariantList*>(_a[0]) = _r; }  break;
-        case 36: { QVariantList _r = getClock_slot();
+        case 40: { QVariantList _r = getClock_slot();
             if (_a[0]) *reinterpret_cast< QVariantList*>(_a[0]) = _r; }  break;
-        case 37: { int _r = createOCPatch((*reinterpret_cast< int(*)>(_a[1])),(*reinterpret_cast< int(*)>(_a[2])),(*reinterpret_cast< int(*)>(_a[3])));
+        case 41: { int _r = createOCPatch((*reinterpret_cast< int(*)>(_a[1])),(*reinterpret_cast< int(*)>(_a[2])),(*reinterpret_cast< int(*)>(_a[3])));
             if (_a[0]) *reinterpret_cast< int*>(_a[0]) = _r; }  break;
-        case 38: { int _r = changeMicSens_slot((*reinterpret_cast< int(*)>(_a[1])),(*reinterpret_cast< int(*)>(_a[2])));
+        case 42: { int _r = changeMicSens_slot((*reinterpret_cast< int(*)>(_a[1])),(*reinterpret_cast< int(*)>(_a[2])));
             if (_a[0]) *reinterpret_cast< int*>(_a[0]) = _r; }  break;
-        case 39: handleMicAmp((*reinterpret_cast< int(*)>(_a[1])),(*reinterpret_cast< TApaTask(*)>(_a[2]))); break;
-        case 40: handleChannel((*reinterpret_cast< int(*)>(_a[1])),(*reinterpret_cast< TApaTask(*)>(_a[2]))); break;
-        case 41: handle1_10((*reinterpret_cast< int(*)>(_a[1])),(*reinterpret_cast< TApaTask(*)>(_a[2]))); break;
-        case 42: { int _r = dimlight_slot();
+        case 43: handleMicAmp((*reinterpret_cast< int(*)>(_a[1])),(*reinterpret_cast< TApaTask(*)>(_a[2]))); break;
+        case 44: handleChannel((*reinterpret_cast< int(*)>(_a[1])),(*reinterpret_cast< TApaTask(*)>(_a[2]))); break;
+        case 45: handle1_10((*reinterpret_cast< int(*)>(_a[1])),(*reinterpret_cast< TApaTask(*)>(_a[2]))); break;
+        case 46: { int _r = dimlight_slot();
             if (_a[0]) *reinterpret_cast< int*>(_a[0]) = _r; }  break;
-        case 43: { int _r = changeClockMode_slot((*reinterpret_cast< int(*)>(_a[1])));
+        case 47: { int _r = changeClockMode_slot((*reinterpret_cast< int(*)>(_a[1])));
             if (_a[0]) *reinterpret_cast< int*>(_a[0]) = _r; }  break;
-        case 44: { int _r = startL((*reinterpret_cast< QString(*)>(_a[1])));
+        case 48: { int _r = startL((*reinterpret_cast< QString(*)>(_a[1])));
             if (_a[0]) *reinterpret_cast< int*>(_a[0]) = _r; }  break;
-        case 45: { int _r = callSummary_slot();
+        case 49: { int _r = callSummary_slot();
             if (_a[0]) *reinterpret_cast< int*>(_a[0]) = _r; }  break;
-        case 46: { int _r = getClockValue_slot();
+        case 50: { int _r = getClockValue_slot();
             if (_a[0]) *reinterpret_cast< int*>(_a[0]) = _r; }  break;
-        case 47: { int _r = getcallSummary_slot();
+        case 51: { int _r = getcallSummary_slot();
             if (_a[0]) *reinterpret_cast< int*>(_a[0]) = _r; }  break;
-        case 48: { int _r = enableLocked_slot();
+        case 52: { int _r = getDimLight_slot();
             if (_a[0]) *reinterpret_cast< int*>(_a[0]) = _r; }  break;
-        case 49: { int _r = enableDynamic_slot();
+        case 53: { int _r = getWDR_slot();
             if (_a[0]) *reinterpret_cast< int*>(_a[0]) = _r; }  break;
-        case 50: { TInt _r = ChangeValInt((*reinterpret_cast< const TUid(*)>(_a[1])),(*reinterpret_cast< const TUint32(*)>(_a[2])),(*reinterpret_cast< const TInt(*)>(_a[3])));
+        case 54: { int _r = wdr_slot();
+            if (_a[0]) *reinterpret_cast< int*>(_a[0]) = _r; }  break;
+        case 55: { int _r = enableLocked_slot();
+            if (_a[0]) *reinterpret_cast< int*>(_a[0]) = _r; }  break;
+        case 56: { int _r = enableDynamic_slot();
+            if (_a[0]) *reinterpret_cast< int*>(_a[0]) = _r; }  break;
+        case 57: { TInt _r = ChangeValInt((*reinterpret_cast< const TUid(*)>(_a[1])),(*reinterpret_cast< const TUint32(*)>(_a[2])),(*reinterpret_cast< const TInt(*)>(_a[3])));
             if (_a[0]) *reinterpret_cast< TInt*>(_a[0]) = _r; }  break;
-        case 51: { TInt _r = ReadValInt((*reinterpret_cast< const TUid(*)>(_a[1])),(*reinterpret_cast< const TUint32(*)>(_a[2])));
+        case 58: { TInt _r = ReadValInt((*reinterpret_cast< const TUid(*)>(_a[1])),(*reinterpret_cast< const TUint32(*)>(_a[2])));
             if (_a[0]) *reinterpret_cast< TInt*>(_a[0]) = _r; }  break;
-        case 52: { TInt _r = ChangeValStr((*reinterpret_cast< const TUid(*)>(_a[1])),(*reinterpret_cast< const TUint32(*)>(_a[2])),(*reinterpret_cast< const QString(*)>(_a[3])));
+        case 59: { TInt _r = ChangeValStr((*reinterpret_cast< const TUid(*)>(_a[1])),(*reinterpret_cast< const TUint32(*)>(_a[2])),(*reinterpret_cast< const QString(*)>(_a[3])));
             if (_a[0]) *reinterpret_cast< TInt*>(_a[0]) = _r; }  break;
-        case 53: { TInt _r = ReadValStr((*reinterpret_cast< const TUid(*)>(_a[1])),(*reinterpret_cast< const TUint32(*)>(_a[2])),(*reinterpret_cast< QString*(*)>(_a[3])));
+        case 60: { TInt _r = ReadValStr((*reinterpret_cast< const TUid(*)>(_a[1])),(*reinterpret_cast< const TUint32(*)>(_a[2])),(*reinterpret_cast< QString*(*)>(_a[3])));
             if (_a[0]) *reinterpret_cast< TInt*>(_a[0]) = _r; }  break;
         default: ;
         }
-        _id -= 54;
+        _id -= 61;
     }
     return _id;
 }
