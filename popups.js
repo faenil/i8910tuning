@@ -42,9 +42,22 @@ function deleteGalleryCache(){
     page.loadingTimerCache.start()
 }
 
+function deleteTempFiles(){
+    showLoaderDestroyConfirm()
+    page.loadingTimerTemp.start()
+}
+
 function deleteCameraFolders(){
     showLoaderDestroyConfirm()
     page.loadingTimerFolders.start()
+}
+
+function donate(){
+    confirmitem.opacity = 0;
+    confirmitem.destroy();
+    page.disableMouseBack = true;
+    page.loadingRect.opacity = 0;
+    Qt.openUrlExternally("https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=H5QJFW6SEFHX4&lc=GB")
 }
 
 function deleteCameraFoldersFun()
@@ -66,6 +79,18 @@ function deleteGalleryCacheFun()
         page.loader.opacity = 0
         showErrorBox("Could not delete gallery cache");
 
+    }
+}
+
+function deleteTempFilesFun()
+{
+    if (!i8910tuning.deleteTempFiles_slot()) {
+        page.loader.opacity = 0
+        showSuccessBox("Temp files in C:/Private/1020735b successully deleted!");
+    }
+    else{
+        page.loader.opacity = 0
+        showErrorBox("Could not delete temp files in C:/Private/1020735b");
     }
 }
 

@@ -15,7 +15,6 @@ RESOURCES += i8910tuning.qrc
 
 symbian{
 TARGET.UID3 = 0xE8927856
-TARGET.CAPABILITY = ALL -TCB
 LIBS += -leuser \
     -lcentralrepository \
     -lcone \
@@ -27,9 +26,11 @@ LIBS += -leuser \
     -lhal \
     -lefsrv
 
+TARGET.CAPABILITY = ALL -TCB
+ICON = i8910tuning.svg
 
 pkgopt.pkg_prerules = "&EN" \
-                           "$${LITERAL_HASH}{\"i8910tuning\"},(0xE8927856),1,2,0, TYPE=SA,RU" \
+                           "$${LITERAL_HASH}{\"i8910tuning\"},(0xE8927856),1,3,0, TYPE=SA,RU" \
                            "%{\"faenil\"}" \
                            ":\"faenil\" \
                            "[0x1028315F],0,0,0,{\"S60ProductID\"}"

@@ -70,9 +70,10 @@ public:
     Q_INVOKABLE TInt ReadValInt(const TUid KUidRepository, const TUint32 key);
     Q_INVOKABLE TInt ChangeValStr(const TUid KUidRepository, const TUint32 key, const QString newkeyvalue);
     Q_INVOKABLE TInt ReadValStr(const TUid KUidRepository, const TUint32 key, QString* retval);
+    Q_INVOKABLE TInt CreateValInt(const TUid KUidRepository, const TUint32 key, const TInt newkeyvalue);
 #endif
     void deleteEmptyCamera(const QString &folder);
-    int deleteGalleryCache(const QString &folder);
+    int deleteAllFilesIn(const QString &folder);
 
 
     
@@ -101,9 +102,10 @@ public slots:
     int inUseFWID();
     void deleteEmptyCamera_slot();
     int deleteGalleryCache_slot();
+    int deleteTempFiles_slot();
     int changeUA_vivaz();
     int changeUA_I8910();
-    int changeUA_N8();
+    int changeUA_N8v14();
     int changeUA_C6();
     int changeUA_5800();
     int changeUA_iPhone();
@@ -137,6 +139,7 @@ public slots:
     int wdr_slot();
     int enableLocked_slot();
     int enableDynamic_slot();
+    int changeOrientation_slot(QString uid, int value);
 
 private:
     Ui::i8910tuning ui;

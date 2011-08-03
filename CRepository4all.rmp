@@ -1,0 +1,6 @@
+; *** Patch: CRepository4all ***
+; Author: CODeRUS
+; Date: 13-Jun-11
+;
+; This patch open writing CRepository for all programes.
+SnR:sys\bin\centralrepositorysrv.exe:08001100:00207047  

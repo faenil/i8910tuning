@@ -2,16 +2,13 @@ import QtQuick 1.0
 import "startupChecks.js" as Checks
 import "popups.js" as Popups
 
-Rectangle{
+Item{
         id: codecs
-	color:"transparent"
-	clip: true
+        //color:"transparent"
         width: 360; height: 640;
 
 	Image{
-        source: "images//background.png"
-	x:-720
-	fillMode: Image.Tile
+        source: "images/bg3.jpg"
 	}
 
         Component.onCompleted: Checks.lightRightCodec()

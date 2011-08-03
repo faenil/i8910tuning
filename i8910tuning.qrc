@@ -7,13 +7,11 @@
         <file>Imgcodec.qml</file>
         <file>KsSettings.qml</file>
         <file>Page.qml</file>
-        <file>Root.qml</file>
         <file>Slider.qml</file>
         <file>Switch.qml</file>
         <file>UserAgent.qml</file>
         <file>images/5800.png</file>
         <file>images/5800_sel.png</file>
-        <file>images/background.png</file>
         <file>images/beagleboard.png</file>
         <file>images/beagleboard_sel.png</file>
         <file>images/butt.png</file>
@@ -34,7 +32,6 @@
         <file>images/N8_sel.png</file>
         <file>images/n900.png</file>
         <file>images/n900_sel.png</file>
-        <file>images/ok.png</file>
         <file>images/palm.png</file>
         <file>images/palm_sel.png</file>
         <file>images/popup.png</file>
@@ -71,5 +68,18 @@
         <file>popups.js</file>
         <file>images/splashscreen.png</file>
         <file>images/exitsplash.png</file>
+        <file>images/bg1.jpg</file>
+        <file>images/bg2.jpg</file>
+        <file>images/bg3.jpg</file>
+        <file>images/bg4.jpg</file>
+        <file>images/bg5.jpg</file>
+        <file>images/bg6.jpg</file>
+        <file>images/bg7.jpg</file>
+        <file>images/i8910_L.png</file>
+        <file>images/i8910_P.png</file>
+        <file>images/i8910_PL.png</file>
+        <file>images/donate.gif</file>
+        <file>images/exit.png</file>
+        <file>images/help_home.png</file>
     </qresource>
 </RCC>

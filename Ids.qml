@@ -2,19 +2,17 @@ import QtQuick 1.0
 import "startupChecks.js" as Checks
 import "popups.js" as Popups
 
-Rectangle{
+Item{
 	id: ids
-	color:"transparent"
-	clip: true
+        //color:"transparent"
         width: 360; height: 640;
         property alias inusefw: fwgrid.selected
 
         Component.onCompleted: Checks.lightRightFW()
 
 	Image{
-        source: "images/background.png"
-	x:0
-	fillMode: Image.Tile
+        source: "images/bg1.jpg"
+
 	}
 
         Grid{

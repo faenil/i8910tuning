@@ -18,12 +18,10 @@ Item{
         property alias loadingTimerSwitch: loadingTimer4
         property alias loadingTimerCache: loadingTimer5
         property alias loadingTimerFolders: loadingTimer6
+        property alias loadingTimerTemp: loadingTimer7
         property alias loader: loaderGif
         property alias forceexit: forceexitpopup
         property alias forceexitmsg: forceexittxt.text
-
-
-
 
         VisualItemModel{
 		id: itemModel
@@ -55,8 +53,18 @@ Item{
                     }
                 }
 
-                //Camera{id: camera; }
-                //Codecs{id: codecs;}
+                /*Loader{
+                    id : listloader
+                    width: 360
+                    height:640
+                    source: "Utilities.qml"
+
+
+
+                }*/
+
+                Camera{id: camera; }
+                Codecs{id: codecs;}
                 KsSettings{id: kssettings;}
                 Clock{id: ocsettings;}
                 Mic{id:mic}
@@ -89,14 +97,16 @@ Item{
                     GradientStop { position: 0.7; color:"black"}
                     GradientStop { position: 1.0; color:"transparent"}
                     }
-            Text{
-                id:helpButtTxt
-                text: "Help"
+            Image{
+                id:helpButtImg
+
+                source: "images/help_home.png"
+                width: 48
+                height: 48
                 anchors.left: parent.left
-                anchors.verticalCenter: parent.verticalCenter;
+                anchors.top: parent.top
+                anchors.topMargin: 10
                 anchors.leftMargin: 10
-                font.pointSize: 14
-                color: "grey"
                 MouseArea{
                     id: helpbutt
                     anchors.fill: parent
@@ -107,6 +117,7 @@ Item{
                                        "and it is meant for medium-advanced users only.\n\n" +
                                     "How to use?\n It's very easy, just swipe through the settings screens with your finger, or scroll the menu bar at the bottom to change screen, as easy as that!\n\n" +
                                     "IDChange screen:\nIn this screen you can change FirmwareID and UserAgent. To change them, just tap on the corresponding box (or swipe up or down) and then choose the desired phone from the grid.\n" +
+                                    "NOTE: Open4All patch must be active in RomPatcher for the FirmwareID change to work properly!\n"+
                                     "FirmwareID change is used to make OviSuite recognize the i8910, while the UserAgent change is used to change the user agent of the web browser, which could be usefult to surf websites which are restricted to Nokia phones (i.e. Nokia Store website, ecc), or to use some applications which perform a check on the useragent, i.e OviStore (which needs a Nokia UserAgent to work), and TrackID (which need a SonyEricsson phone UserAgent to work).\n\n"+
                                     "How to make OviSuite recognize my i8910?\n"+
                                     "1) Switch FirmwareID to 5800\n"+
@@ -175,12 +186,14 @@ Item{
                             break
                         case 6:
                             helptext = "This screen contains many utilities:\n\n" +
+                                    "NOTE: You need CRepository4All patch to be active in RomPatcher if you want to add a new orientation setting for an app which is not in the given list."+
+                                    "- Orientation settings: you can change the orientation setting of your favourite app with this utility. It enough to write the UID of your app in the white box (or select one of the apps from the list) and then click on one of the three icons in the lower part to set the desired orientation mode. You can set Portrait Only, Landscape Only, or Portrait/Landscape modes."+
+                                    "- Delete Cache: press this button to delete the gallery cache, useful when you have some broken images in the gallery.\n"+
+                                    "- Delete Temp files: press this button to delete all the files in C:/Private/1020735b and free up some space in C drive.\n"+
                                     "- Call Summary : use the switch to Enable or Disable the call summary after the end of calls.\n"+
-                                    "- Dim Light: use the switch to Enable or Disable the dim light mode, which lowers the screen backlight thus saving more battery power.\n"+
-                                    "- Delete Cache: press this button to delete the gallery cache, useful when you have some broken images in the gallery.\n"
+                                    "- Dim Light: use the switch to Enable or Disable the dim light mode, which lowers the screen backlight thus saving more battery power.\n"
 
 
-                            //UTILITIES?? TO BE DEFINED
                             break
                         }
 
@@ -193,18 +206,54 @@ Item{
                 states: State{
                         name: "pressed"
                         when: helpbutt.pressed
-                        PropertyChanges {target: helpButtTxt; color: "white"}
+                        PropertyChanges {target: helpButtImg; opacity: 0.7}
+                }
+            }
+            Image{
+                id:donateimg
+                source: "images/donate.gif"
+                anchors.horizontalCenter: parent.horizontalCenter;
+                anchors.verticalCenter: parent.verticalCenter;
+
+                MouseArea{
+                    id:donatebutt
+                    anchors.fill: parent
+                    onClicked: {
+                        Popups.confirmcomp = Qt.createComponent("ConfirmBox.qml");
+                        Popups.confirmitem = Popups.confirmcomp.createObject(page)
+                        Popups.confirmitem.anchors.centerIn = page;
+                        Popups.confirmitem.title = "Donate"
+                        Popups.confirmitem.msg = "Thanks. You'll now be redirected to Paypal's webpage to complete the donation."
+
+                        page.loadingRect.opacity = 0.6
+
+                        Popups.confirmitem.opacity = 1;
+
+                        page.disableMouseBack = true
+
+                        Popups.confirmitem.confirmed.connect(Popups.donate)
+                    }
+
+                }
+
+                states: State{
+                        name: "pressed"
+                        when: donatebutt.pressed
+                        PropertyChanges {target: donatetxt; color: "white"}
                 }
             }
 
-            Text{
-                id:exittxt
-                text: "Exit"
+            Image{
+                id:exitimg
+                source: "images/exit.png"
+
+                width: 48
+                height: width
                 anchors.right: parent.right
                 anchors.rightMargin: 10
-                anchors.verticalCenter: parent.verticalCenter;
-                font.pointSize: 14
-                color: "grey"
+                anchors.top: parent.top
+                anchors.topMargin: 10
+
                 MouseArea{
                     id:exitbutt
                     anchors.fill: parent
@@ -229,7 +278,7 @@ Item{
                 states: State{
                         name: "pressed"
                         when: exitbutt.pressed
-                        PropertyChanges {target: exittxt; color: "white"}
+                        PropertyChanges {target: exitimg; opacity : 0.7}
                 }
             }
         }
@@ -303,7 +352,35 @@ Item{
 
                         MouseArea{
                             anchors.fill: parent
-                            onClicked:  {menuListView.currentIndex = index; view.currentIndex = index;}
+                            onClicked:  {
+                                menuListView.currentIndex = index;
+                                view.currentIndex = index;
+
+                                /*switch (index){
+                                case 0:{
+                                    listloader.source = "IdStatus.qml";
+                                    break
+                                }
+                                case 1:
+                                    listloader.source = "Camera.qml";
+                                    break
+                                case 2:
+                                    listloader.source = "Codecs.qml"
+                                    break
+                                case 3:
+                                    listloader.source = "KsSettings.qml"
+                                    break
+                                case 4:
+                                    listloader.source = "Clock.qml"
+                                    break
+                                case 5:
+                                    listloader.source = "Mic.qml"
+                                    break
+                                case 6:
+                                    listloader.source = "Utilities.qml"
+                                    break
+                                }*/
+                            }
                         }
                     }
 
@@ -644,7 +721,7 @@ Item{
 
 
                 Image{
-                        id: exitimg
+                        id: exitpopupimg
                         source: "images/yes.png"
                         width: 64
                         height: width
@@ -695,6 +772,11 @@ Item{
                 id:loadingTimer6
                 interval: 200; running: false; repeat: false;
                 onTriggered: Popups.deleteCameraFoldersFun()
+            }
+            Timer{
+                id:loadingTimer7
+                interval: 200; running: false; repeat: false;
+                onTriggered: Popups.deleteTempFilesFun()
             }
         }
 

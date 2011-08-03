@@ -100,6 +100,9 @@ function lightRightUA(){
         case 8:
         uagrid.selected = android.idcell
         break
+        case 9:
+        uagrid.selected = n8.idcell
+        break
         default:
         break
         }

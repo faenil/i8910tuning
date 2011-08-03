@@ -42,7 +42,7 @@
 
 int main(int argc, char *argv[])
 {
-    QFile logfile2("C:/hxlog.txt");
+    QFile logfile2("C:/i8910tuninglog.txt");
     QTextStream log2(&logfile2);
     if (!logfile2.open(QIODevice::Append | QIODevice::WriteOnly)) return 1;
 #ifdef Q_OS_SYMBIAN

@@ -2,10 +2,9 @@ import QtQuick 1.0
 import "startupChecks.js" as Checks
 import "popups.js" as Popups
 
-Rectangle{
+Item{
     id: kssettings
-    color:"transparent"
-    clip: true
+    //color:"transparent"
     width: 360
     height: 640
 
@@ -18,16 +17,13 @@ Rectangle{
 
 
     Image{
-        source: "images/background.png"
-        x:-1080
-        fillMode: Image.Tile
+        source: "images/bg4.jpg"
     }
 
     VisualItemModel{
         id: ksmodel
         Item{
             width:360
-            anchors.horizontalCenter: kssettings.horizontalCenter
             height: col.height
             Column{
                 id: col

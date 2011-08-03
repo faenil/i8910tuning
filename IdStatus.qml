@@ -1,18 +1,14 @@
 import QtQuick 1.0
 import "startupChecks.js" as Checks
 
-Rectangle
+Item
 {
 id: idstatus
-	border.color: "transparent"
-	color:"transparent"
-        clip: true
+        //color:"transparent"
         width: 360; height: 640;
 
         Image{
-        source: "images/background.png"
-        x:0
-        fillMode: Image.Tile
+        source: "images/bg1.jpg"
         }
 
         Column{

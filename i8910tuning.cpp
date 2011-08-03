@@ -82,13 +82,17 @@ TInt i8910tuning::ChangeValInt(const TUid KUidRepository, const TUint32 key, con
 	
 	if(err) {
                 //QMessageBox::information(this, tr("Error while changing value"), "NewL ChangeValInt error:"+intstr);
-		return err;
+            delete iRepository;
+
+            return err;
 	}
 	err = iRepository->Set(key, newkeyvalue); 
 	intstr = QString::number(err);
 	if(err) {
                 //QMessageBox::information(this, tr("Error while changing value"), "Set error:"+intstr);
-		return err;
+            delete iRepository;
+
+            return err;
 	}
 	delete iRepository;
 	return err;
@@ -106,13 +110,17 @@ TInt i8910tuning::ChangeValStr(const TUid KUidRepository, const TUint32 key, con
 
         if(err) {
                 //QMessageBox::information(this, tr("Error while changing value"), "NewL ChangeValInt error:"+intstr);
-                return err;
+            delete iRepository;
+
+            return err;
         }
         err = iRepository->Set(key, tbuf);
         intstr = QString::number(err);
         if(err) {
                 //QMessageBox::information(this, tr("Error while changing value"), "Set error:"+intstr);
-                return err;
+            delete iRepository;
+
+            return err;
         }
         delete iRepository;
         return err;
@@ -175,6 +183,33 @@ TInt i8910tuning::ReadValStr(const TUid KUidRepository, const TUint32 key, QStri
 
         retval->insert(0, (QChar*) val.Ptr(),val.Length());
 
+        return err;
+#endif
+}
+
+TInt i8910tuning::CreateValInt(const TUid KUidRepository, const TUint32 key, const TInt newkeyvalue){
+#ifdef Q_OS_SYMBIAN
+        TInt err;
+        CRepository* iRepository = 0;
+        QString intstr;
+        TRAP(err, iRepository = CRepository::NewL(KUidRepository));
+        intstr = QString::number(err);
+
+        if(err) {
+                //QMessageBox::information(this, tr("Error while changing value"), "NewL CreateValInt error:"+intstr);
+            delete iRepository;
+
+            return err;
+        }
+        err = iRepository->Create(key, newkeyvalue);
+        intstr = QString::number(err);
+        if(err) {
+                //QMessageBox::information(this, tr("Error while creating value"), "Create error:"+intstr);
+            delete iRepository;
+
+            return err;
+        }
+        delete iRepository;
         return err;
 #endif
 }
@@ -321,22 +356,34 @@ int i8910tuning::supprOFF_slot()
 int i8910tuning::checkSuppr_slot(){
 #ifdef Q_OS_SYMBIAN
         QByteArray comparefile;
-	QFile oldsett("C:/Private/10202BE9/10282EDC.txt");
-        if (!oldsett.exists()) { return -1;}
+        QFile oldsettZ("Z:/Private/10202BE9/10282EDC.txt");
+
 	QFile on("E:/data/SymbianTuning/noisesuppr/ON.txt");
         if (!on.exists()) { return -2;}
 	QFile off("E:/data/SymbianTuning/noisesuppr/OFF.txt");
         if (!off.exists()) { return -3;}
-	
-        if (!oldsett.open(QIODevice::ReadOnly)) {return -5;}
+        QFile oldsett("C:/Private/10202BE9/10282EDC.txt");
         if (!off.open(QIODevice::ReadOnly)) { oldsett.close(); return -6;}
         if (!on.open(QIODevice::ReadOnly)) {oldsett.close(); off.close(); return -7;}
+
+        if (!oldsett.exists()) {
+            if (!oldsettZ.open(QIODevice::ReadOnly)) {return -5;}
+            comparefile = oldsettZ.readAll();
+            if (on.readAll() == comparefile) {off.close(); on.close(); oldsettZ.close(); return 1;}
+            if (off.readAll() == comparefile) {off.close(); on.close(); oldsettZ.close(); return 0;}
+
+            off.close(); on.close(); oldsettZ.close();
+            return -1;
+
+        }
+
+        if (!oldsett.open(QIODevice::ReadOnly)) {return -5;}
 
         comparefile = oldsett.readAll();
         if (on.readAll() == comparefile) {off.close(); on.close(); oldsett.close(); return 1;}
         if (off.readAll() == comparefile) {off.close(); on.close(); oldsett.close(); return 0;}
 
-        {off.close(); on.close(); oldsett.close(); return -4;}
+        {off.close(); on.close(); oldsett.close(); return -1;}
 #endif
         return 0;
 }
@@ -583,6 +630,7 @@ int i8910tuning::inUseUA()
     QString vivaz("SonyEricssonU5i/R2AA; Mozilla/5.0 (SymbianOS/9.4; U; Series60/5.0 Profile/MIDP-2.1 Configuration/CLDC-1.1) AppleWebKit/525 (KHTML, like Gecko) Version/3.0 Safari/525");
     QString galaxys2("Mozilla/5.0 (Linux; U; Android 2.3.3; es-us; GT-I9100 Build/GINGERBREAD) AppleWebKit/533.1 (KHTML, like Gecko) Version/4.0 Mobile Safari/533.1");
     QString iphone("Mozilla/5.0 (iPhone; U; CPU iPhone OS 4_3_3 like Mac OS X; en-us) AppleWebKit/533.17.9 (KHTML, like Gecko) Version/5.0.2 Mobile/8J2 Safari/6533.18.5");
+    QString N8v14("Mozilla/5.0 (Symbian/3; Series60/5.2 NokiaN8-00/014.002; Profile/MIDP-2.1 Configuration/CLDC-1.1 ) AppleWebKit/525 (KHTML, like Gecko) Version/3.0 BrowserNG/7.2.8.10 3gpp-gba");
     TInt error;
     static const TUid repository = { 0x101F8731 };
     const TUint32 key = 0x4;
@@ -601,6 +649,9 @@ int i8910tuning::inUseUA()
                                 if (!val.compare(iphone)) return 7;
                                 else {
                                     if (!val.compare(galaxys2)) return 8;
+                                    else{
+                                        if (!val.compare(N8v14)) return 9;
+                                    }
                                 }
                             }
                         }
@@ -698,7 +749,7 @@ void i8910tuning::deleteEmptyCamera_slot()
 #endif
 }
 
-int i8910tuning::deleteGalleryCache(const QString &folder)
+int i8910tuning::deleteAllFilesIn(const QString &folder)
 {
 #ifdef Q_OS_SYMBIAN
 	QDir dir(folder);	
@@ -709,7 +760,7 @@ int i8910tuning::deleteGalleryCache(const QString &folder)
 			qWarning() << "can't remove '" << fileInfo.filePath() << "'";
                         return -1;
 		} else if (fileInfo.isDir())
-                        if (deleteGalleryCache(fileInfo.filePath())) return -1;
+                        if (deleteAllFilesIn(fileInfo.filePath())) return -1;
 	}	
         if (!dir.rmdir(dir.absolutePath())){
 		qWarning() << "can't remove '" << dir.absolutePath() << "'";
@@ -724,9 +775,19 @@ int i8910tuning::deleteGalleryCache_slot()
 {
 #ifdef Q_OS_SYMBIAN
 
-    if (QDir("C:/Private/101f8857/cache").exists() && deleteGalleryCache("C:/Private/101f8857/cache")) return -1;
-    if (QDir("E:/Private/101f8857/cache").exists() && deleteGalleryCache("E:/Private/101f8857/cache")) return -1;
-    if (QDir("F:/Private/101f8857/cache").exists() && deleteGalleryCache("F:/Private/101f8857/cache")) return -1;
+    if (QDir("C:/Private/101f8857/cache").exists() && deleteAllFilesIn("C:/Private/101f8857/cache")) return -1;
+    if (QDir("E:/Private/101f8857/cache").exists() && deleteAllFilesIn("E:/Private/101f8857/cache")) return -1;
+    if (QDir("F:/Private/101f8857/cache").exists() && deleteAllFilesIn("F:/Private/101f8857/cache")) return -1;
+    return 0;
+#endif
+    return -1;
+}
+
+int i8910tuning::deleteTempFiles_slot()
+{
+#ifdef Q_OS_SYMBIAN
+
+    if (QDir("C:/Private/1020735b").exists() && deleteAllFilesIn("C:/Private/1020735b")) return -1;
     return 0;
 #endif
     return -1;
@@ -839,11 +900,11 @@ int i8910tuning::changeUA_C6()
     return -1;
 }
 
-int i8910tuning::changeUA_N8()
+int i8910tuning::changeUA_N8v14()
 {
 #ifdef Q_OS_SYMBIAN
         QString val;
-        QString UA("Mozilla/5.0 (SymbianOS/9.4; U; Series60/5.0 Nokia5800d-1/52.0.007; Profile/MIDP-2.1 Configuration/CLDC-1.1 ) AppleWebKit/413 (KHTML, like Gecko) Safari/413");
+        QString UA("Mozilla/5.0 (Symbian/3; Series60/5.2 NokiaN8-00/014.002; Profile/MIDP-2.1 Configuration/CLDC-1.1 ) AppleWebKit/525 (KHTML, like Gecko) Version/3.0 BrowserNG/7.2.8.10 3gpp-gba");
         TInt error;
         static const TUid repository = { 0x101F8731 };
         const TUint32 key = 0x4;
@@ -2313,6 +2374,35 @@ int i8910tuning::startL(QString path)
     return -1;
 }
 
+int i8910tuning::changeOrientation_slot(QString uid, int value)
+{
+#ifdef Q_OS_SYMBIAN
+
+    const TUint32 key = uid.toUInt(0,16);
+    TInt val;
+    TInt error;
+    static const TUid repository = { 0x200159ED };
+
+    val = ReadValInt(repository, key);
+    if (val!=KErrNotFound)
+    {
+        error = ChangeValInt(repository, key, value);
+        if (error) return error;
+
+    }
+    else{
+        error = CreateValInt(repository, key, value);
+        if (error) return error;
+    }
+
+    val = ReadValInt(repository, key);
+
+    if (val == value) return 0;
+    else return -1;
+#endif
+    return -1;
+
+}
 
 
 void i8910tuning::startcamera_slot()

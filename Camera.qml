@@ -2,10 +2,9 @@ import QtQuick 1.0
 import "startupChecks.js" as Checks
 import "popups.js" as Popups
 
-Rectangle{
+Item{
 	id: camera
-	color:"transparent"
-	clip: true
+        //color:"transparent"
         width: 360
         height: 640
 
@@ -14,9 +13,8 @@ Rectangle{
         property int mode: 0
 
 	Image{
-        source: "images/background.png"
-	x:-360
-	fillMode: Image.Tile
+        source: "images/bg2.jpg"
+
 	}
 
 	Column{

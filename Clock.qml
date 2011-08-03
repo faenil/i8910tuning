@@ -4,7 +4,6 @@ import "popups.js" as Popups
 
 Item{
         id: ocsettings
-        clip: true
         width: 360
         height: 640
 
@@ -19,16 +18,13 @@ Item{
         signal set_dynamic_mode
 
         Image{
-        source: "images/background.png"
-        x:-1440
-        fillMode: Image.Tile
+        source: "images/bg5.jpg"
         }
 
         VisualItemModel{
             id: clockmodel
             Item{
-                width:parent.width
-                anchors.horizontalCenter: ocsettings.horizontalCenter
+                width:360
                 height: col.height
 
             Column{
